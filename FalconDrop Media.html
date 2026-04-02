@@ -1,0 +1,1168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- Preconnect to fonts/external resources early -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+<!-- Tell browser to render fast, no telephone detection nonsense -->
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+<!-- Preload your main CSS and JS -->
+<link rel="preload" href="style.css" as="style">
+<link rel="preload" href="script.js" as="script">
+
+<!-- Your CSS link (after preload) -->
+<link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>FalconDrop Media — Droppin' the Verdict ✔</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;700;800;900&family=Roboto+Mono:wght@400;600&display=swap" rel="stylesheet"/>
+  <style>
+    /* GPU-accelerate anything that animates */
+.animated-element, .card, .hero, .ticker {
+  will-change: transform, opacity;
+  transform: translateZ(0); /* forces GPU layer */
+}
+
+/* Smooth rendering across all browsers */
+* {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Prevent layout shift on images */
+img {
+  content-visibility: auto;
+}
+    :root {
+      --black: #000000;
+      --black2: #0a0a0a;
+      --surface: #111111;
+      --surface2: #1a1a1a;
+      --border: rgba(255,255,255,0.07);
+      --cyan: #00ddff;
+      --red: #ff2d4a;
+      --green: #39ff14;
+      --orange: #ff6b35;
+      --purple: #c084fc;
+      --white: #ffffff;
+      --muted: #666666;
+      --glow: 0 0 30px rgba(0,221,255,0.35);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--black);
+      color: var(--white);
+      font-family: 'Inter Tight', sans-serif;
+      overflow-x: hidden;
+      cursor: none;
+    }
+
+    /* CUSTOM CURSOR */
+    .cursor-dot {
+      width: 8px; height: 8px;
+      background: var(--white);
+      border-radius: 50%;
+      position: fixed;
+      top: 0; left: 0;
+      pointer-events: none;
+      z-index: 9999;
+      transition: transform 0.1s ease;
+    }
+    .cursor-ring {
+      width: 32px; height: 32px;
+      border: 1px solid rgba(255,255,255,0.4);
+      border-radius: 50%;
+      position: fixed;
+      top: 0; left: 0;
+      pointer-events: none;
+      z-index: 9998;
+      transition: transform 0.12s ease, width 0.2s, height 0.2s, border-color 0.2s;
+    }
+
+    /* NAV */
+    nav {
+  position: fixed;
+  top: 0; 
+  left: 0; 
+  right: 0;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.9rem 3rem;
+  border-bottom: 1px solid var(--border);
+
+  /* BROWSER SUPPORT STAFF */
+  background: rgba(6, 13, 20, 0.96); /* Solid fallback */
+  -webkit-backdrop-filter: blur(20px); /* Safari support */
+  backdrop-filter: blur(20px); /* Modern support */
+}
+
+    .nav-brand {
+      display: flex; align-items: center; gap: 0.75rem;
+      text-decoration: none;
+    }
+
+    .nav-logo {
+      width: 36px; height: 36px;
+      border-radius: 50%;
+      border: 1px solid rgba(0,221,255,0.3);
+      object-fit: cover;
+    }
+
+    .nav-title {
+      font-family: 'Roboto Mono', monospace;
+      font-size: 0.7rem;
+      font-weight: 600;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--white);
+    }
+
+    .nav-sub {
+      font-family: 'Roboto Mono', monospace;
+      font-size: 0.45rem;
+      color: var(--muted);
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+    }
+
+    .nav-links {
+      display: flex; align-items: center; gap: 2rem;
+      list-style: none;
+    }
+
+    .nav-links a {
+      font-family: 'Roboto Mono', monospace;
+      font-size: 0.6rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--muted);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+
+    .nav-links a:hover { color: var(--white); }
+
+    .nav-cta {
+      font-family: 'Roboto Mono', monospace;
+      font-size: 0.6rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--black);
+      background: var(--white);
+      padding: 0.6rem 1.2rem;
+      border-radius: 4px;
+      text-decoration: none;
+      transition: background 0.2s, color 0.2s;
+    }
+
+    .nav-cta:hover {
+      background: var(--cyan);
+      color: var(--black);
+    }
+
+    /* HERO */
+    .hero {
+      min-height: 100vh;
+      display: flex; flex-direction: column;
+      align-items: flex-start; justify-content: flex-end;
+      padding: 8rem 2.5rem 6rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-bg {
+      position: absolute; inset: 0;
+      background: radial-gradient(ellipse 80% 60% at 60% 40%, rgba(0,221,255,0.04) 0%, transparent 60%),
+                  radial-gradient(ellipse 40% 40% at 10% 80%, rgba(255,45,74,0.03) 0%, transparent 50%);
+    }
+
+    .hero-tag {
+      font-family: 'Roboto Mono', monospace;
+      font-size: 0.65rem;
+      letter-spacing: 0.35em;
+      text-transform: uppercase;
+      color: var(--cyan);
+      margin-bottom: 1.5rem;
+      display: flex; align-items: center; gap: 0.75rem;
+      position: relative; z-index: 1;
+    }
+
+    .hero-tag::before {
+      content: '';
+      width: 6px; height: 6px;
+      background: var(--cyan);
+      border-radius: 50%;
+      box-shadow: var(--glow);
+      animation: pulse 2s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.5; transform: scale(0.8); }
+    }
+
+    .hero-title {
+      font-family: 'Inter Tight', sans-serif;
+      font-size: clamp(4rem, 10vw, 11rem);
+      font-weight: 900;
+      line-height: 0.92;
+      letter-spacing: -0.03em;
+      text-transform: uppercase;
+      position: relative; z-index: 1;
+      margin-bottom: 2rem;
+    }
+
+    .hero-title .line { display: block; overflow: hidden; }
+    .hero-title .line span { display: block; animation: slideUp 0.8s cubic-bezier(0.16,1,0.3,1) both; }
+    .hero-title .line:nth-child(2) span { animation-delay: 0.1s; }
+    .hero-title .accent { color: var(--cyan); }
+
+    @keyframes slideUp {
+      from { transform: translateY(110%); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+
+    .hero-bottom {
+      display: flex; align-items: flex-end; justify-content: space-between;
+      width: 100%;
+      position: relative; z-index: 1;
+    }
+
+    .hero-desc {
+      font-size: 0.9rem;
+      color: var(--muted);
+      font-weight: 400;
+      max-width: 380px;
+      line-height: 1.7;
+    }
+
+    .hero-btns {
+      display: flex; gap: 1rem;
+    }
+
+    .btn-primary {
+      font-family: 'Roboto Mono', monospace;
+      font-size: 0.65rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--black);
+      background: var(--white);
+      padding: 0.85rem 2rem;
+      border-radius: 4px;
+      text-decoration: none;
+      transition: background 0.2s;
+    }
+
+    .btn-primary:hover { background: var(--cyan); }
+
+    .btn-secondary {
+      font-family: 'Roboto Mono', monospace;
+      font-size: 0.65rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--white);
+      background: transparent;
+      border: 1px solid var(--border);
+      padding: 0.85rem 2rem;
+      border-radius: 4px;
+      text-decoration: none;
+      transition: border-color 0.2s;
+    }
+
+    .btn-secondary:hover { border-color: rgba(255,255,255,0.3); }
+
+    /* TICKER */
+    .ticker {
+      background: var(--surface);
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      padding: 0.85rem 0;
+      overflow: hidden;
+      white-space: nowrap;
+    }
+
+    .ticker-inner {
+      display: inline-flex; gap: 0;
+      animation: ticker 25s linear infinite;
+    }
+
+    .ticker-item {
+      font-family: 'Roboto Mono', monospace;
+      font-size: 0.6rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--muted);
+      padding: 0 3rem;
+    }
+
+    .ticker-item span { color: var(--cyan); }
+
+    @keyframes ticker {
+      from { transform: translateX(0); }
+      to { transform: translateX(-50%); }
+    }
+
+    /* SECTIONS SHARED */
+    section { padding: 7rem 2.5rem; }
+
+    .sec-eyebrow {
+      font-family: 'Roboto Mono', monospace;
+      font-size: 0.6rem;
+      letter-spacing: 0.35em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 1.5rem;
+      display: flex; align-items: center; gap: 1rem;
+    }
+
+    .sec-eyebrow::after {
+      content: '';
+      flex: 1; height: 1px;
+      background: var(--border);
+    }
+
+    .sec-title {
+      font-family: 'Inter Tight', sans-serif;
+      font-size: clamp(2rem, 4vw, 3.5rem);
+      font-weight: 900;
+      letter-spacing: -0.02em;
+      text-transform: uppercase;
+      margin-bottom: 4rem;
+    }
+
+    .sec-title .accent { color: var(--cyan); }
+
+    /* FEATURED GRID */
+    .featured { background: var(--black); }
+
+    .feat-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1px;
+      background: var(--border);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      overflow: hidden;
+    }
+
+    .feat-card {
+      background: var(--surface);
+      padding: 2rem;
+      position: relative;
+      transition: background 0.3s;
+      text-decoration: none;
+      color: var(--white);
+      display: block;
+    }
+
+    .feat-card:hover { background: var(--surface2); }
+
+    .feat-card-tag {
+      font-family: 'Roboto Mono', monospace;
+      font-size: 0.55rem;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      padding: 0.3rem 0.75rem;
+      border-radius: 100px;
+      display: inline-block;
+      margin-bottom: 1.5rem;
+    }
+
+    .tag-game { background: rgba(0,221,255,0.1); color: var(--cyan); }
+    .tag-foot { background: rgba(57,255,20,0.1); color: var(--green); }
+    .tag-film { background: rgba(255,107,53,0.1); color: var(--orange); }
+    .tag-art  { background: rgba(192,132,252,0.1); color: var(--purple); }
+    .tag-anal { background: rgba(57,255,20,0.1); color: var(--green); }
+
+    .feat-card-title {
+      font-family: 'Inter Tight', sans-serif;
+      font-size: 1rem;
+      font-weight: 800;
+      line-height: 1.2;
+      letter-spacing: -0.01em;
+      margin-bottom: 0.75rem;
+    }
+
+    .feat-card-excerpt {
+      font-size: 0.8rem;
+      color: var(--muted);
+      line-height: 1.7;
+      margin-bottom: 1.5rem;
+      font-weight: 400;
+    }
+
+    .feat-card-meta {
+      display: flex; align-items: center; justify-content: space-between;
+    }
+
+    .feat-score {
+      font-family: 'Roboto Mono', monospace;
+      font-size: 1.5rem;
+      font-weight: 600;
+      color: var(--cyan);
+    }
+
+    .feat-read {
+      font-family: 'Roboto Mono', monospace;
+      font-size: 0.55rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--white);
+      background: var(--surface2);
+      padding: 0.4rem 0.85rem;
+      border-radius: 4px;
+      text-decoration: none;
+      transition: background 0.2s, color 0.2s;
+    }
+
+    .feat-read:hover { background: var(--cyan); color: var(--black); }
+
+    .feat-card::after {
+      content: '';
+      position: absolute; bottom: 0; left: 0; right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, var(--cyan), transparent);
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 0.3s ease;
+    }
+
+    .feat-card:hover::after { transform: scaleX(1); }
+
+    /* CATEGORIES */
+    .categories { background: var(--black2); }
+
+    .cat-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1px;
+      background: var(--border);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      overflow: hidden;
+    }
+
+    .cat-card {
+      background: var(--surface);
+      padding: 2.5rem 2rem;
+      position: relative;
+      transition: background 0.3s;
+      text-decoration: none;
+      color: var(--white);
+      display: block;
+      overflow: hidden;
+    }
+
+    .cat-card:hover { background: var(--surface2); }
+
+    .cat-num {
+      font-family: 'Roboto Mono', monospace;
+      font-size: 0.55rem;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 2rem;
+    }
+
+    .cat-emoji { font-size: 2rem; display: block; margin-bottom: 1rem; }
+
+    .cat-name {
+      font-family: 'Inter Tight', sans-serif;
+      font-size: 1.3rem;
+      font-weight: 900;
+      letter-spacing: -0.01em;
+      text-transform: uppercase;
+      margin-bottom: 0.75rem;
+    }
+
+    .cat-desc {
+      font-size: 0.8rem;
+      color: var(--muted);
+      line-height: 1.6;
+      font-weight: 400;
+      margin-bottom: 2rem;
+    }
+
+    .cat-arrow {
+      font-size: 1.2rem;
+      color: var(--muted);
+      transition: transform 0.2s, color 0.2s;
+    }
+
+    .cat-card:hover .cat-arrow {
+      transform: translate(4px, -4px);
+      color: var(--white);
+    }
+
+    .cat-card-game .cat-name { color: var(--cyan); }
+    .cat-card-foot .cat-name { color: var(--green); }
+    .cat-card-film .cat-name { color: var(--orange); }
+    .cat-card-art .cat-name { color: var(--purple); }
+
+    /* LATEST POSTS */
+    .latest { background: var(--black); }
+
+    .posts-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1px;
+      background: var(--border);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      overflow: hidden;
+    }
+
+    .post-card {
+      background: var(--surface);
+      padding: 2rem;
+      transition: background 0.3s;
+      position: relative;
+    }
+
+    .post-card:hover { background: var(--surface2); }
+
+    .post-tag {
+      font-family: 'Roboto Mono', monospace;
+      font-size: 0.55rem;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      padding: 0.3rem 0.75rem;
+      border-radius: 100px;
+      display: inline-block;
+      margin-bottom: 1.25rem;
+    }
+
+    .post-title {
+      font-family: 'Inter Tight', sans-serif;
+      font-size: 1rem;
+      font-weight: 800;
+      line-height: 1.2;
+      letter-spacing: -0.01em;
+      margin-bottom: 0.75rem;
+    }
+
+    .post-excerpt {
+      font-size: 0.8rem;
+      color: var(--muted);
+      line-height: 1.7;
+      margin-bottom: 1.5rem;
+      font-weight: 400;
+    }
+
+    .post-meta {
+      display: flex; align-items: center; justify-content: space-between;
+    }
+
+    .post-score {
+      font-family: 'Roboto Mono', monospace;
+      font-size: 1.5rem;
+      font-weight: 600;
+      color: var(--cyan);
+    }
+
+    .post-score-label {
+      font-family: 'Roboto Mono', monospace;
+      font-size: 0.5rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-top: 0.2rem;
+    }
+
+    .read-more {
+      font-family: 'Roboto Mono', monospace;
+      font-size: 0.55rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--white);
+      background: var(--surface2);
+      padding: 0.4rem 0.85rem;
+      border-radius: 4px;
+      text-decoration: none;
+      transition: background 0.2s, color 0.2s;
+    }
+
+    .read-more:hover { background: var(--cyan); color: var(--black); }
+
+    /* ABOUT */
+    .about { background: var(--black2); }
+
+    .about-inner {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 6rem;
+      align-items: start;
+    }
+
+    .about-logo {
+      width: 80px; height: 80px;
+      border-radius: 50%;
+      border: 1px solid rgba(0,221,255,0.3);
+      object-fit: cover;
+      margin-bottom: 2rem;
+    }
+
+    .about-name {
+      font-family: 'Inter Tight', sans-serif;
+      font-size: 2rem;
+      font-weight: 900;
+      letter-spacing: -0.02em;
+      text-transform: uppercase;
+      margin-bottom: 0.5rem;
+    }
+
+    .about-handle {
+      font-family: 'Roboto Mono', monospace;
+      font-size: 0.65rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--cyan);
+      margin-bottom: 2rem;
+    }
+
+    .about-text {
+      font-size: 0.95rem;
+      color: var(--muted);
+      line-height: 1.9;
+      margin-bottom: 1.2rem;
+    }
+
+    .about-text strong { color: var(--white); font-weight: 700; }
+
+    .creds {
+      display: flex; flex-direction: column; gap: 1px;
+      background: var(--border);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+      margin-bottom: 2rem;
+    }
+
+    .cred {
+      background: var(--surface);
+      padding: 1.25rem 1.5rem;
+      display: flex; gap: 1rem; align-items: flex-start;
+      border-left: 2px solid transparent;
+      transition: background 0.2s;
+    }
+
+    .cred:hover { background: var(--surface2); }
+    .cred:nth-child(1) { border-left-color: var(--purple); }
+    .cred:nth-child(2) { border-left-color: var(--cyan); }
+    .cred:nth-child(3) { border-left-color: var(--orange); }
+
+    .cred-icon { font-size: 1.2rem; flex-shrink: 0; margin-top: 2px; }
+    .cred-name {
+      font-family: 'Inter Tight', sans-serif;
+      font-weight: 700; font-size: 0.85rem;
+      color: var(--white); margin-bottom: 0.2rem;
+    }
+    .cred-school {
+      font-size: 0.75rem; color: var(--muted);
+      font-weight: 400; line-height: 1.5;
+    }
+
+    .stat-row {
+      display: grid; grid-template-columns: repeat(3,1fr);
+      gap: 1px; background: var(--border);
+      border: 1px solid var(--border);
+      border-radius: 12px; overflow: hidden;
+    }
+
+    .stat {
+      background: var(--surface);
+      padding: 1.5rem; text-align: center;
+    }
+
+    .stat-num {
+      font-family: 'Inter Tight', sans-serif;
+      font-size: 2rem; font-weight: 900;
+      color: var(--cyan);
+      letter-spacing: -0.02em;
+    }
+
+    .stat-label {
+      font-family: 'Roboto Mono', monospace;
+      font-size: 0.5rem; color: var(--muted);
+      letter-spacing: 0.2em; text-transform: uppercase;
+      margin-top: 0.3rem;
+    }
+
+    /* FOOTER */
+    footer {
+      background: var(--black);
+      border-top: 1px solid var(--border);
+      padding: 1.5rem 2.5rem;
+    }
+
+    .footer-top {
+      display: flex; justify-content: space-between; align-items: center;
+      padding-bottom: 1.5rem;
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 1.5rem;
+    }
+
+    .footer-brand {
+      display: flex; align-items: center; gap: 1rem;
+    }
+
+    .footer-logo {
+      width: 36px; height: 36px;
+      border-radius: 50%;
+      border: 1px solid rgba(0,221,255,0.2);
+      object-fit: cover;
+    }
+
+    .footer-name {
+      font-family: 'Roboto Mono', monospace;
+      font-size: 0.7rem;
+      font-weight: 600;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--white);
+    }
+
+    .footer-tagline {
+      font-family: 'Roboto Mono', monospace;
+      font-size: 0.45rem;
+      color: var(--muted);
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+    }
+
+    .footer-links {
+      display: flex; gap: 2rem; list-style: none;
+    }
+
+    .footer-links a {
+      font-family: 'Roboto Mono', monospace;
+      font-size: 0.6rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--muted);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+
+    .footer-links a:hover { color: var(--white); }
+
+    .footer-bottom {
+      display: flex; justify-content: space-between; align-items: center;
+    }
+
+    .footer-copy {
+      font-family: 'Roboto Mono', monospace;
+      font-size: 0.5rem;
+      color: var(--muted);
+      letter-spacing: 0.15em;
+    }
+
+    .footer-copy span { color: var(--white); }
+
+    /* FADE IN */
+    .fade-in { opacity: 0; transform: translateY(24px); transition: opacity 0.6s ease, transform 0.6s ease; }
+    .fade-in.visible { opacity: 1; transform: translateY(0); }
+
+    /* RESPONSIVE */
+    @media (max-width: 1024px) {
+      .feat-grid, .cat-grid { grid-template-columns: repeat(2,1fr); }
+      .posts-grid { grid-template-columns: repeat(2,1fr); }
+      .about-inner { grid-template-columns: 1fr; gap: 3rem; }
+    }
+
+    @media (max-width: 768px) {
+      nav { padding: 1rem 1.25rem; }
+      .nav-links { display: none; }
+      section { padding: 4rem 1.25rem; }
+      .hero { padding: 0 1.25rem 4rem; }
+      .feat-grid, .cat-grid, .posts-grid { grid-template-columns: 1fr; }
+      .hero-bottom { flex-direction: column; align-items: flex-start; gap: 2rem; }
+      footer { padding: 2rem 1.25rem; }
+      .footer-top { flex-direction: column; gap: 1.5rem; align-items: flex-start; }
+      .footer-bottom { flex-direction: column; gap: 0.5rem; text-align: center; }
+      .cursor-dot, .cursor-ring { display: none; }
+      body { cursor: default; }
+    }
+  </style>
+</head>
+<body>
+  <!-- Defer JS so it doesn't block rendering -->
+<script src="script.js" defer></script>
+defer = page renders first, JS runs after. That's the smooth feel.
+
+  <!-- CURSOR -->
+  <div class="cursor-dot" id="cursor"></div>
+  <div class="cursor-ring" id="cursorRing"></div>
+
+  <!-- NAV -->
+  <nav>
+    <a href="#home" class="nav-brand">
+      <img src="FalconDroplogo.png" class="nav-logo" alt="FalconDrop Media"/>
+      <div>
+        <div class="nav-title">Falcon Drop Media</div>
+        <div class="nav-sub">Media Criticism · Droppin' the Verdict ✔</div>
+      </div>
+    </a>
+    <ul class="nav-links">
+      <li><a href="#featured">Reviews</a></li>
+      <li><a href="#categories">Categories</a></li>
+      <li><a href="#latest">Latest</a></li>
+      <li><a href="#about">About</a></li>
+    </ul>
+    <a href="#latest" class="nav-cta">Read Now</a>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero" id="home">
+    <div class="hero-bg"></div>
+    <div class="hero-tag">Latest Verdict: Live</div>
+    <h1 class="hero-title">
+      <div class="line"><span>FALCON</span></div>
+      <div class="line"><span>DROP <span class="accent">MEDIA</span></span></div>
+    </h1>
+    <div class="hero-bottom">
+      <p class="hero-desc">Sharp game reviews. Tactical football breakdowns. Animated film critiques. Art reviews. One brand. Four passions. Zero sugarcoating.</p>
+      <div class="hero-btns">
+        <a href="#latest" class="btn-primary">Latest Reviews</a>
+        <a href="#about" class="btn-secondary">About Me</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- TICKER -->
+  <div class="ticker">
+    <div class="ticker-inner">
+      <span class="ticker-item">🎮 Game Reviews <span>·</span></span>
+      <span class="ticker-item">⚽ Football Analysis <span>·</span></span>
+      <span class="ticker-item">🎬 Animated Films <span>·</span></span>
+      <span class="ticker-item">🎨 Art Reviews <span>·</span></span>
+      <span class="ticker-item">Pure Yeet <span>·</span></span>
+      <span class="ticker-item">Zimbabwe 🇿🇼 <span>·</span></span>
+      <span class="ticker-item">Droppin' the Verdict ✔ <span>·</span></span>
+      <span class="ticker-item">FalconDrop Media <span>·</span></span>
+      <span class="ticker-item">🎮 Game Reviews <span>·</span></span>
+      <span class="ticker-item">⚽ Football Analysis <span>·</span></span>
+      <span class="ticker-item">🎬 Animated Films <span>·</span></span>
+      <span class="ticker-item">🎨 Art Reviews <span>·</span></span>
+      <span class="ticker-item">Pure Yeet <span>·</span></span>
+      <span class="ticker-item">Zimbabwe 🇿🇼 <span>·</span></span>
+      <span class="ticker-item">Droppin' the Verdict ✔ <span>·</span></span>
+      <span class="ticker-item">FalconDrop Media <span>·</span></span>
+    </div>
+  </div>
+
+  <!-- FEATURED -->
+  <section class="featured fade-in" id="featured">
+    <div class="sec-eyebrow">Top Picks</div>
+    <h2 class="sec-title">Featured <span class="accent">Verdicts</span></h2>
+    <div class="feat-grid">
+
+      <div class="feat-card">
+        <span class="feat-card-tag tag-game">🎮 Review</span>
+        <div class="feat-card-title">Geometry Dash Lite — Fun Until The Spikes Hit</div>
+        <p class="feat-card-excerpt">Cool mechanics. Bright colors. Music that hits. And a cube that refuses to jump when you need it most. Those spikes come out of nowhere.</p>
+        <div class="feat-card-meta">
+          <div>
+            <div class="feat-score">7.8</div>
+            <div class="post-score-label">/ 10 Verdict</div>
+          </div>
+          <a href="geometry-dash-review.html" class="feat-read">Read</a>
+        </div>
+      </div>
+
+      <div class="feat-card">
+        <span class="feat-card-tag tag-anal">⚽ Analysis</span>
+        <div class="feat-card-title">Will Arteta Finally Do It? — Arsenal's Title Race 2026</div>
+        <p class="feat-card-excerpt">Three seasons. Second place. The memes are real. But Arsenal are 7 points clear and City made Klopp quit. 50/50.</p>
+        <div class="feat-card-meta">
+          <div>
+            <div class="feat-score">50/50</div>
+            <div class="post-score-label">Verdict</div>
+          </div>
+          <a href="arsenal-title-race.html" class="feat-read">Read</a>
+        </div>
+      </div>
+
+      <div class="feat-card">
+        <span class="feat-card-tag tag-film">🎬 Film Review</span>
+        <div class="feat-card-title">Minions: The Rise of Gru — Nobody Talks About This Film Enough</div>
+        <p class="feat-card-excerpt">A mini villain. Retired supervillains as heroes. Three Minions in a chicken and bunny costume defeating trained bad guys.</p>
+        <div class="feat-card-meta">
+          <div>
+            <div class="feat-score">8.2</div>
+            <div class="post-score-label">/ 10 Verdict</div>
+          </div>
+          <a href="rise-of-gru-review.html" class="feat-read">Read</a>
+        </div>
+      </div>
+
+      <div class="feat-card">
+        <span class="feat-card-tag tag-art">🎨 Art Review</span>
+        <div class="feat-card-title">Van Gogh's Starry Night — Painted After A Lucid Dream</div>
+        <p class="feat-card-excerpt">The settlers might be farmers. Or wizards. Either way this painting is a 9.2 out of 10 masterpiece.</p>
+        <div class="feat-card-meta">
+          <div>
+            <div class="feat-score">9.2</div>
+            <div class="post-score-label">/ 10 Verdict</div>
+          </div>
+          <a href="starry-night-review.html" class="feat-read">Read</a>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- CATEGORIES -->
+  <section class="categories fade-in" id="categories">
+    <div class="sec-eyebrow">Browse by Category</div>
+    <h2 class="sec-title">What We <span class="accent">Cover</span></h2>
+    <div class="cat-grid">
+
+      <a href="games.html" class="cat-card cat-card-game">
+        <div class="cat-num">Section 01</div>
+        <span class="cat-emoji">🎮</span>
+        <div class="cat-name">Game Reviews</div>
+        <p class="cat-desc">In-depth critiques covering gameplay mechanics, story, graphics, replayability and value for money.</p>
+        <div class="cat-arrow">↗</div>
+      </a>
+
+      <a href="football.html" class="cat-card cat-card-foot">
+        <div class="cat-num">Section 02</div>
+        <span class="cat-emoji">⚽</span>
+        <div class="cat-name">Football</div>
+        <p class="cat-desc">Tactical match breakdowns, player ratings, formation analysis and post-match verdicts.</p>
+        <div class="cat-arrow">↗</div>
+      </a>
+
+      <a href="animatedfilms.html" class="cat-card cat-card-film">
+        <div class="cat-num">Section 03</div>
+        <span class="cat-emoji">🎬</span>
+        <div class="cat-name">Animated Films</div>
+        <p class="cat-desc">From Pixar blockbusters to Studio Ghibli masterpieces — animated cinema reviewed with depth.</p>
+        <div class="cat-arrow">↗</div>
+      </a>
+
+      <a href="art.html" class="cat-card cat-card-art">
+        <div class="cat-num">Section 04</div>
+        <span class="cat-emoji">🎨</span>
+        <div class="cat-name">Art Reviews</div>
+        <p class="cat-desc">In-depth critiques of artworks, artists, exhibitions and art styles — reviewed by a certified artist.</p>
+        <div class="cat-arrow">↗</div>
+      </a>
+
+    </div>
+  </section>
+
+  <!-- LATEST POSTS -->
+  <section class="latest fade-in" id="latest">
+    <div class="sec-eyebrow">Fresh Off the Drop</div>
+    <h2 class="sec-title">Latest <span class="accent">Posts</span></h2>
+    <div class="posts-grid">
+
+      <div class="post-card">
+        <span class="post-tag tag-game">🎮 Review</span>
+        <div class="post-title">FIFA 19 — Is It Still Worth Playing In 2026?</div>
+        <p class="post-excerpt">Years later FIFA 19 still hits different. Career mode glory, smooth gameplay and the Champions League license — one of EA's best ever.</p>
+        <div class="post-meta">
+          <div>
+            <div class="post-score">8.5</div>
+            <div class="post-score-label">/ 10 Verdict</div>
+          </div>
+          <a href="fifa19-review.html" class="read-more">Read</a>
+        </div>
+      </div>
+
+      <div class="post-card">
+        <span class="post-tag tag-foot">⚽ Analysis</span>
+        <div class="post-title">Joao Pedro — Most Improved — The Transformation is Real</div>
+        <p class="post-excerpt">Started soft, had disciplinary issues. Then the Napoli away game happened. Screamers. Worldies. Drogba vibes.</p>
+        <div class="post-meta">
+          <div>
+            <div class="post-score">8.7</div>
+            <div class="post-score-label">/ 10 Verdict</div>
+          </div>
+          <a href="joao-pedro-analysis.html" class="read-more">Read</a>
+        </div>
+      </div>
+
+      <div class="post-card">
+        <span class="post-tag tag-film">🎬 Film Review</span>
+        <div class="post-title">Minions: The Rise of Gru — Fun Until The Spikes Hit</div>
+        <p class="post-excerpt">A mini villain who nobody takes seriously. Retired top villains as heroes. Chicken bunny Minions defeating trained bad guys.</p>
+        <div class="post-meta">
+          <div>
+            <div class="post-score">8.2</div>
+            <div class="post-score-label">/ 10 Verdict</div>
+          </div>
+          <a href="rise-of-gru-review.html" class="read-more">Read</a>
+        </div>
+      </div>
+
+      <div class="post-card">
+        <span class="post-tag tag-game">🎮 Review</span>
+        <div class="post-title">Mortal Kombat 11 — The Most Complete Fighting Game Ever Made?</div>
+        <p class="post-excerpt">Ruthless, brutal and addictive. Two-player mode is pure chaos — you can try every move but your opponent will hit you with one.</p>
+        <div class="post-meta">
+          <div>
+            <div class="post-score">8.0</div>
+            <div class="post-score-label">/ 10 Verdict</div>
+          </div>
+          <a href="mk11-review.html" class="read-more">Read</a>
+        </div>
+      </div>
+
+      <div class="post-card">
+        <span class="post-tag tag-foot">⚽ Analysis</span>
+        <div class="post-title">Chelsea's Club World Cup Run — World Champions 🏆</div>
+        <p class="post-excerpt">Nervous going in. Enrique had never lost a final. But we are Chelsea — when we are underdogs we deliver. Cole Palmer was sublime.</p>
+        <div class="post-meta">
+          <div>
+            <div class="post-score">8.5</div>
+            <div class="post-score-label">/ 10 Verdict</div>
+          </div>
+          <a href="chelsea-cwc-review.html" class="read-more">Read</a>
+        </div>
+      </div>
+
+      <div class="post-card">
+        <span class="post-tag tag-art">🎨 Art Review</span>
+        <div class="post-title">Van Gogh's Starry Night — Why It Still Hits 130 Years Later</div>
+        <p class="post-excerpt">The swirling sky, the glowing moon, the sleeping village — Starry Night is more than a painting. The settlers might be wizards.</p>
+        <div class="post-meta">
+          <div>
+            <div class="post-score">9.2</div>
+            <div class="post-score-label">/ 10 Masterpiece</div>
+          </div>
+          <a href="starry-night-review.html" class="read-more">Read</a>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ABOUT -->
+  <section class="about fade-in" id="about">
+    <div class="sec-eyebrow">The Person Behind the Drop</div>
+    <h2 class="sec-title">About <span class="accent">Me</span></h2>
+    <div class="about-inner">
+      <div class="about-left">
+        <img src="FalconDroplogo.png" class="about-logo" alt="FalconDrop Media"/>
+        <div class="about-name">Tawonga "Pure Yeet" Banda</div>
+        <div class="about-handle">@falcondropmedia · Zimbabwe 🇿🇼</div>
+        <p class="about-text">My name is <strong>Tawonga "Pure Yeet" Banda</strong> — and this is FalconDrop Media. I don't follow trends. I drop verdicts.</p>
+        <p class="about-text">I hold a <strong>Graphic Design Diploma</strong> from MacMaine School of Computing under <strong>Business and Computing Examinations London</strong> — an internationally recognised qualification. I am currently expanding my skills by studying <strong>Web Design</strong> at the same institution. I also hold a <strong>Certificate in Fine Art</strong> from the <strong>National Art Gallery of Zimbabwe</strong>.</p>
+        <p class="about-text">Proudly repping <strong>Zimbabwe</strong> — gaming, football, chaos art and animated cinema. These aren't just hobbies, they're obsessions. Zero filter. Zero sugarcoating.</p>
+      </div>
+      <div class="about-right">
+        <div class="creds">
+          <div class="cred">
+            <div class="cred-icon">🎓</div>
+            <div>
+              <div class="cred-name">Graphic Design Diploma</div>
+              <div class="cred-school">MacMaine School of Computing · Business and Computing Examinations London — Internationally Recognised</div>
+            </div>
+          </div>
+          <div class="cred">
+            <div class="cred-icon">💻</div>
+            <div>
+              <div class="cred-name">Web Design — In Progress</div>
+              <div class="cred-school">MacMaine School of Computing · This very site is proof of that dedication</div>
+            </div>
+          </div>
+          <div class="cred">
+            <div class="cred-icon">🎨</div>
+            <div>
+              <div class="cred-name">Certificate in Fine Art</div>
+              <div class="cred-school">National Art Gallery of Zimbabwe · Because the creative eye never sleeps</div>
+            </div>
+          </div>
+        </div>
+        <div class="stat-row">
+          <div class="stat">
+            <div class="stat-num">6</div>
+            <div class="stat-label">Reviews</div>
+          </div>
+          <div class="stat">
+            <div class="stat-num">4</div>
+            <div class="stat-label">Sections</div>
+          </div>
+          <div class="stat">
+            <div class="stat-num">100%</div>
+            <div class="stat-label">Honest</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-top">
+      <div class="footer-brand">
+        <img src="FalconDroplogo.png" class="footer-logo" alt="FalconDrop Media"/>
+        <div>
+          <div class="footer-name">Falcon Drop Media</div>
+          <div class="footer-tagline">Media Criticism · Droppin' the Verdict ✔</div>
+        </div>
+      </div>
+      <ul class="footer-links">
+        <li><a href="https://x.com/Pure_Yeet" target="_blank">Twitter / X</a></li>
+        <li><a href="#">YouTube</a></li>
+        <li><a href="#">Instagram</a></li>
+        <li><a href="#">TikTok</a></li>
+        <li><a href="#">Contact</a></li>
+      </ul>
+    </div>
+    <div class="footer-bottom">
+      <p class="footer-copy">© 2026 <span>Falcon Drop Media</span> — All Rights Reserved — Built with HTML and CSS</p>
+      <p class="footer-copy">Designed by <span>Pure Yeet</span> — Zimbabwe 🇿🇼</p>
+    </div>
+  </footer>
+
+  <style>
+    .fade-in {
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.5s ease, transform 0.5s ease;
+    }
+
+    .fade-in.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  </style>
+
+  <script>
+    // CURSOR
+    const cursor = document.getElementById('cursor');
+    const ring = document.getElementById('cursorRing');
+    let mx=0,my=0,rx=0,ry=0;
+    document.addEventListener('mousemove',e=>{
+      mx=e.clientX; my=e.clientY;
+      cursor.style.left=mx-4+'px';
+      cursor.style.top=my-4+'px';
+    });
+    (function animate(){
+      rx+=(mx-rx)*0.1; ry+=(my-ry)*0.1;
+      ring.style.left=rx-16+'px';
+      ring.style.top=ry-16+'px';
+      requestAnimationFrame(animate);
+    })();
+
+    // FADE IN
+    const obs = new IntersectionObserver(entries=>{
+      entries.forEach(e=>{ if(e.isIntersecting) e.target.classList.add('visible'); });
+    },{threshold:0.1});
+    document.querySelectorAll('.fade-in').forEach(el=>obs.observe(el));
+  </script>
+
+</body>
+</html>

@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>Arsenal Title Race 2026 — Falcon Drop Media</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Exo+2:wght@300;400;600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --bg:#060d14; --bg2:#091320; --surface:#0b1a28;
+      --border:rgba(57,255,20,0.12); --green:#39ff14;
+      --white:#e8f4ff; --muted:#4a7a9b;
+      --glow:0 0 20px rgba(57,255,20,0.45);
+    }
+
+    /* THE TACTICAL TARGET CURSOR */
+    html, body { cursor: none; scroll-behavior: smooth; }
+    
+    .cursor-dot {
+      width: 4px; height: 4px; background: var(--green);
+      position: fixed; pointer-events: none; z-index: 10001;
+      transform: translate(-50%, -50%); border-radius: 50%;
+    }
+
+    .cursor-target {
+      width: 30px; height: 30px; border: 1px solid rgba(57, 255, 20, 0.3);
+      position: fixed; pointer-events: none; z-index: 10000;
+      transform: translate(-50%, -50%); border-radius: 50%;
+      transition: transform 0.1s ease-out;
+      display: flex; align-items: center; justify-content: center;
+    }
+
+    /* Crosshair lines */
+    .cursor-target::before, .cursor-target::after {
+      content: ''; position: absolute; background: var(--green); opacity: 0.5;
+    }
+    .cursor-target::before { width: 1px; height: 8px; top: -4px; } /* Top notch */
+    .cursor-target::after { width: 8px; height: 1px; left: -4px; } /* Left notch */
+
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+    body{background:var(--bg);color:var(--white);font-family:'Exo 2',sans-serif;overflow-x:hidden;}
+
+    /* NAV */
+    nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:0.9rem 3rem;background:rgba(6,13,20,0.96);backdrop-filter:blur(20px);border-bottom:1px solid rgba(0,212,255,0.12);}
+    .nav-brand{display:flex;align-items:center;gap:0.85rem;text-decoration:none;}
+    .nav-logo-img{width:42px;height:42px;border-radius:50%;border:1.5px solid rgba(0, 212, 255, 0.4);object-fit:cover;}
+    .nav-title{font-family:'Orbitron', sans-serif;font-size:0.95rem;font-weight:900;letter-spacing:0.12em;color:#00d4ff;text-shadow:0 0 20px rgba(0,212,255,0.45);}
+    .nav-sub{font-family:'Share Tech Mono',monospace;font-size:0.5rem;color:var(--muted);letter-spacing:0.2em;}
+    .back-btn{font-family:'Orbitron', sans-serif;font-size:0.6rem;font-weight:700;letter-spacing:0.15em;padding:0.5rem 1.2rem;border:1px solid var(--green);color:var(--green);text-decoration:none;text-transform:uppercase;transition:0.3s;}
+    .back-btn:hover{background:var(--green);color:var(--bg);box-shadow: var(--glow);}
+
+    /* HERO */
+    .hero{padding:10rem 3rem 4rem;position:relative;border-bottom:1px solid var(--border);}
+    .hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 60% 60% at 50% 0%,rgba(57,255,20,0.07) 0%,transparent 70%);}
+    .review-tag{font-family:'Share Tech Mono',monospace;font-size:0.65rem;letter-spacing:0.35em;color:var(--green);text-transform:uppercase;margin-bottom:1rem;display:flex;align-items:center;gap:0.75rem;}
+    .review-tag::before{content:'';width:28px;height:1px;background:var(--green);}
+    .review-title{font-family:'Orbitron', sans-serif;font-size:clamp(2rem,5vw,4rem);font-weight:900;letter-spacing:0.04em;margin-bottom:1rem;line-height:1.1;}
+    .review-title span{color:var(--green);text-shadow:var(--glow);}
+    
+    .review-meta{display:flex;align-items:center;gap:2rem;margin-bottom:2rem;flex-wrap:wrap;}
+    .meta-item{font-family:'Share Tech Mono',monospace;font-size:0.6rem;color:var(--muted);letter-spacing:0.2em;text-transform:uppercase;}
+    .meta-item span{color:var(--white);}
+
+    .verdict-box{display:inline-flex;align-items:center;gap:1.5rem;padding:1.5rem 2rem;background:var(--surface);border:1px solid var(--border);border-left:3px solid var(--green);}
+    .verdict-score{font-family:'Orbitron', sans-serif;font-size:3.5rem;font-weight:900;color:var(--green);text-shadow:var(--glow);line-height:1;}
+    .verdict-label{font-family:'Share Tech Mono',monospace;font-size:0.55rem;color:var(--muted);letter-spacing:0.2em;text-transform:uppercase;margin-top:0.3rem;}
+    .verdict-text{font-family:'Orbitron', sans-serif;font-size:1rem;font-weight:700;color:var(--white);}
+    .verdict-sub{font-size:0.8rem;color:var(--muted);font-weight:300;margin-top:0.3rem;}
+
+    /* BODY */
+    .review-body{max-width:800px;margin:0 auto;padding:4rem 3rem;}
+    .review-body h2{font-family:'Orbitron', sans-serif;font-size:1.2rem;font-weight:700;color:var(--green);letter-spacing:0.05em;margin-bottom:1rem;margin-top:2.5rem;padding-bottom:0.5rem;border-bottom:1px solid var(--border);}
+    .review-body p{font-size:1rem;color:var(--muted);line-height:1.9;margin-bottom:1.2rem;font-weight:300;}
+    .review-body p strong{color:var(--white);font-weight:600;}
+
+    .highlight-box{background:var(--surface);border:1px solid var(--border);border-left:3px solid var(--green);padding:1.5rem;margin:2rem 0;}
+    .highlight-title{font-family:'Orbitron', sans-serif;font-size:0.8rem;font-weight:700;color:var(--green);letter-spacing:0.1em;margin-bottom:0.75rem;}
+    .highlight-text{font-size:0.95rem;color:var(--white);line-height:1.8;}
+
+    .pros-cons{display:grid;grid-template-columns:1fr 1fr;gap:1.5px;background:var(--border);border:1px solid var(--border);margin:2rem 0;}
+    .pros, .cons{background:var(--surface);padding:1.5rem;}
+    .pc-title{font-family:'Orbitron', sans-serif;font-size:0.8rem;font-weight:700;letter-spacing:0.1em;margin-bottom:1rem;}
+    .pros .pc-title{color:#39ff14;}
+    .cons .pc-title{color:#ff2d4a;}
+    .pc-list{list-style:none;display:flex;flex-direction:column;gap:0.6rem;}
+    .pc-list li{font-size:0.85rem;color:var(--muted);font-weight:300;padding-left:1rem;position:relative;}
+    .pc-list li::before{content:'';position:absolute;left:0;top:50%;transform:translateY(-50%);width:4px;height:4px;border-radius:50%;}
+    .pros .pc-list li::before{background:#39ff14;}
+    .cons .pc-list li::before{background:#ff2d4a;}
+
+    .final-verdict{background:var(--surface);border:1px solid var(--border);border-left:3px solid var(--green);padding:2rem;margin-top:2rem;}
+    .fv-title{font-family:'Orbitron', sans-serif;font-size:0.8rem;font-weight:700;color:var(--green);letter-spacing:0.1em;margin-bottom:0.75rem;}
+    .fv-text{font-size:1rem;color:var(--white);line-height:1.8;font-weight:400;}
+
+    footer{border-top:1px solid rgba(0,212,255,0.12);padding:2.5rem 3rem;display:flex;justify-content:space-between;align-items:center;background:var(--bg2);margin-top:4rem;}
+    .footer-name{font-family:'Orbitron', sans-serif;font-size:1rem;font-weight:900;color:#00d4ff;}
+    .footer-copy{font-family:'Share Tech Mono',monospace;font-size:0.55rem;color:var(--muted);}
+
+    .fade-in { opacity: 0; transform: translateY(20px); transition: 0.6s ease-out; }
+    .fade-in.visible { opacity: 1; transform: translateY(0); }
+
+    @media(max-width:768px){
+      nav{padding:0.9rem 1rem;}
+      .hero{padding:8rem 1.5rem 3rem;}
+      .review-body{padding:3rem 1.5rem;}
+      .pros-cons{grid-template-columns:1fr;}
+      .cursor-dot, .cursor-target { display: none; }
+      html, body { cursor: auto; }
+      footer { flex-direction: column; gap: 1rem; text-align: center; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="cursor-dot"></div>
+  <div class="cursor-target"></div>
+
+  <nav>
+    <a href="index.html" class="nav-brand">
+      <img src="FalconDroplogo.png" class="nav-logo-img" alt="Falcon Drop Media"/>
+      <div>
+        <div class="nav-title">FALCONDROP MEDIA</div>
+        <div class="nav-sub">Media Criticism · Droppin' the Verdict ✔</div>
+      </div>
+    </a>
+    <a href="football.html" class="back-btn">← Football</a>
+  </nav>
+
+  <div class="hero fade-in">
+    <div class="review-tag">⚽ Title Race Analysis</div>
+    <h1 class="review-title">Will Arteta <span>Finally Do It?</span></h1>
+    <div class="review-meta">
+      <div class="meta-item">Season: <span>2025/26</span></div>
+      <div class="meta-item">Arsenal Points: <span>67</span></div>
+      <div class="meta-item">Gap: <span>7 Points Clear</span></div>
+      <div class="meta-item">Reviewed by: <span>Pure Yeet</span></div>
+    </div>
+    <div class="verdict-box">
+      <div>
+        <div class="verdict-score">50/50</div>
+        <div class="verdict-label">Pure Yeet Verdict</div>
+      </div>
+      <div>
+        <div class="verdict-text">It Depends On City. Simple As That.</div>
+        <div class="verdict-sub">As a Chelsea fan I am ready to hear the noise 😂</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="review-body">
+    <div class="fade-in">
+        <h2>Three Seasons. Second Place. The Memes Are Real.</h2>
+        <p>Let me start by acknowledging the elephant in the room — <strong>the Arteta memes</strong>. Three seasons in a row finishing second. Three seasons of coming so close and watching someone else lift the trophy. The internet has not been kind to Arsenal and honestly? The memes have been accurate.</p>
+        <p>But here is the thing — Arsenal are now <strong>seven points clear</strong> at the top of the Premier League. Arteta has built something real at that club and this might genuinely be the season where the memes finally retire. Pure Yeet is watching closely. 👀</p>
+    </div>
+
+    <div class="fade-in">
+        <h2>Man City — The Circus That Made Klopp Quit</h2>
+        <p>Before we talk about Arsenal we have to talk about <strong>Man City</strong> — because they are the reason this conversation is even complicated. For years City turned the Premier League into their personal trophy cabinet. Every. Single. Year. 😂</p>
+        <p>And the most wild part? <strong>They made Jurgen Klopp quit Liverpool.</strong> One of the greatest managers in football history decided he did not have the energy to keep fighting the machine. That is the hurdle Arsenal has to clear.</p>
+    </div>
+
+    <div class="highlight-box fade-in">
+      <div class="highlight-title">😂 The Award Circus</div>
+      <p class="highlight-text">Manager of the Season — Pep. Player of the Season — City player. Golden Boot — City striker. Young Player — Foden. Every year. City turned the Premier League into a one-team show.</p>
+    </div>
+
+    <div class="fade-in">
+        <h2>Arsenal Must Prove It In The EFL Cup First</h2>
+        <p>Here is Pure Yeet's key point — before Arsenal can be taken seriously as title winners they need to <strong>prove it in the EFL Cup final first</strong>. That is silverware. That is a statement that this squad knows how to win when it matters most.</p>
+    </div>
+
+    <div class="pros-cons fade-in">
+      <div class="pros">
+        <div class="pc-title">+ ARSENAL CAN WIN IF</div>
+        <ul class="pc-list">
+          <li>They win the EFL Cup to build momentum</li>
+          <li>Saka and Odegaard stay fit and firing</li>
+          <li>They keep attacking and don't park the bus</li>
+          <li>City continue their inconsistent form</li>
+        </ul>
+      </div>
+      <div class="cons">
+        <div class="pc-title">− ARSENAL WILL BOTTLE IF</div>
+        <ul class="pc-list">
+          <li>City go on a classic Pep winning run</li>
+          <li>Key injuries hit at the wrong time</li>
+          <li>They start protecting the lead too early</li>
+          <li>The pressure of history gets in their heads</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="final-verdict fade-in">
+      <div class="fv-title">🟢 PURE YEET VERDICT — 50/50</div>
+      <p class="fv-text">Arsenal are seven points clear and Arteta has built something genuinely special. The problem is Man City. You cannot count them out until it is mathematically impossible. Arsenal must win the EFL Cup, keep believing, and stay focused. As a Chelsea fan, I have no dog in this fight — but I'm ready for the noise. Pure Yeet has spoken. 🦅</p>
+    </div>
+  </div>
+
+  <footer>
+    <div class="footer-name">FALCONDROP MEDIA</div>
+    <div>
+        <p class="footer-copy">&copy; 2026 Falcon Drop Media — All Rights Reserved</p>
+        <p class="footer-copy">Designed by <span style="color:#00d4ff">Pure Yeet</span> — Zimbabwe</p>
+    </div>
+  </footer>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      // Intersection Observer for animations
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(e => {
+          if (e.isIntersecting) e.target.classList.add('visible');
+        });
+      }, { threshold: 0.1 });
+
+      document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+
+      // Tactical Target Cursor Logic
+      const dot = document.querySelector('.cursor-dot');
+      const target = document.querySelector('.cursor-target');
+      
+      document.addEventListener('mousemove', (e) => {
+        dot.style.left = e.clientX + 'px';
+        dot.style.top = e.clientY + 'px';
+        target.style.left = e.clientX + 'px';
+        target.style.top = e.clientY + 'px';
+      });
+
+      // Interactive hover effects
+      const links = document.querySelectorAll('a, .verdict-box, .highlight-box');
+      links.forEach(link => {
+        link.addEventListener('mouseenter', () => {
+          target.style.transform = 'translate(-50%, -50%) scale(1.5)';
+          target.style.borderColor = 'white';
+        });
+        link.addEventListener('mouseleave', () => {
+          target.style.transform = 'translate(-50%, -50%) scale(1)';
+          target.style.borderColor = 'rgba(57, 255, 20, 0.3)';
+        });
+      });
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Chelsea Club World Cup 2025 — Falcon Drop Media</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Exo+2:wght@300;400;600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+
+  <style>
+    /* PERFORMANCE RESET */
+    * {
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      box-sizing: border-box; margin: 0; padding: 0;
+    }
+
+    :root {
+      --bg: #060d14; 
+      --bg2: #091320; 
+      --surface: #0b1a28; 
+      --surface2: #0f2236;
+      --border: rgba(57, 255, 20, 0.15); 
+      --green: #39ff14; /* Tournament Winner Theme */
+      --cyan: #00d4ff;
+      --white: #e8f4ff; 
+      --muted: #4a7a9b;
+      --glow: 0 0 20px rgba(57, 255, 20, 0.45);
+    }
+
+    /* TOURNAMENT GREEN CURSOR */
+    html, body { cursor: none; scroll-behavior: smooth; }
+    .custom-cursor {
+      width: 8px; height: 8px; background: var(--green); border-radius: 50%;
+      position: fixed; pointer-events: none; z-index: 10000;
+      transform: translate(-50%, -50%); box-shadow: var(--glow);
+    }
+    .cursor-follower {
+      width: 30px; height: 30px; border: 1.5px solid rgba(57, 255, 20, 0.3);
+      border-radius: 50%; position: fixed; pointer-events: none; z-index: 9999;
+      transform: translate(-50%, -50%); transition: transform 0.08s ease-out;
+    }
+
+    body { background: var(--bg); color: var(--white); font-family: 'Exo 2', sans-serif; overflow-x: hidden; }
+
+    /* NAVIGATION */
+    nav {
+      position: fixed; top: 0; left: 0; right: right; z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0.9rem 3rem; background: rgba(6, 13, 20, 0.96);
+      backdrop-filter: blur(20px); border-bottom: 1px solid rgba(0, 212, 255, 0.12);
+      width: 100%;
+    }
+    .nav-brand { display: flex; align-items: center; gap: 0.85rem; text-decoration: none; }
+    .nav-logo-img { width: 42px; height: 42px; border-radius: 50%; border: 1.5px solid rgba(0, 212, 255, 0.4); object-fit: cover; }
+    .nav-title { font-family: 'Orbitron', sans-serif; font-size: 0.95rem; font-weight: 900; letter-spacing: 0.12em; color: var(--cyan); text-shadow: 0 0 20px rgba(0, 212, 255, 0.3); }
+    .nav-sub { font-family: 'Share Tech Mono', monospace; font-size: 0.5rem; color: var(--muted); letter-spacing: 0.2em; }
+    
+    .back-btn {
+      font-family: 'Orbitron', sans-serif; font-size: 0.6rem; font-weight: 700; letter-spacing: 0.15em;
+      padding: 0.5rem 1.2rem; border: 1px solid var(--green); color: var(--green);
+      text-decoration: none; text-transform: uppercase; transition: 0.3s;
+    }
+    .back-btn:hover { background: var(--green); color: var(--bg); box-shadow: var(--glow); }
+
+    /* HERO */
+    .hero { padding: 12rem 3rem 4rem; position: relative; border-bottom: 1px solid var(--border); }
+    .hero::before {
+      content: ''; position: absolute; inset: 0;
+      background: radial-gradient(ellipse 60% 60% at 50% 0%, rgba(57, 255, 20, 0.07) 0%, transparent 70%);
+    }
+    .review-tag { font-family: 'Share Tech Mono', monospace; font-size: 0.65rem; letter-spacing: 0.35em; color: var(--green); text-transform: uppercase; margin-bottom: 1rem; display: flex; align-items: center; gap: 0.75rem; }
+    .review-tag::before { content: ''; width: 28px; height: 1px; background: var(--green); }
+    .review-title { font-family: 'Orbitron', sans-serif; font-size: clamp(2rem, 5vw, 4rem); font-weight: 900; letter-spacing: 0.04em; margin-bottom: 1rem; line-height: 1.1; text-transform: uppercase; }
+    .review-title span { color: var(--green); text-shadow: var(--glow); }
+
+    .review-meta { display: flex; align-items: center; gap: 2rem; margin-bottom: 2rem; flex-wrap: wrap; }
+    .meta-item { font-family: 'Share Tech Mono', monospace; font-size: 0.6rem; color: var(--muted); letter-spacing: 0.2em; text-transform: uppercase; }
+    .meta-item span { color: var(--white); }
+
+    .verdict-box { display: inline-flex; align-items: center; gap: 1.5rem; padding: 1.5rem 2rem; background: var(--surface); border: 1px solid var(--border); border-left: 3.5px solid var(--green); }
+    .verdict-score { font-family: 'Orbitron', sans-serif; font-size: 3.5rem; font-weight: 900; color: var(--green); text-shadow: var(--glow); line-height: 1; }
+    .verdict-label { font-family: 'Share Tech Mono', monospace; font-size: 0.55rem; color: var(--muted); letter-spacing: 0.2em; text-transform: uppercase; margin-top: 0.3rem; }
+    .verdict-text { font-family: 'Orbitron', sans-serif; font-size: 1rem; font-weight: 700; color: var(--white); text-transform: uppercase; }
+
+    /* RESULTS GRID */
+    .results-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 1rem; margin: 2.5rem 0; }
+    .result-card { background: var(--surface); border: 1px solid var(--border); padding: 1.5rem; text-align: center; border-radius: 4px; }
+    .result-teams { font-family: 'Orbitron', sans-serif; font-size: 0.65rem; font-weight: 700; color: var(--white); margin-bottom: 0.5rem; }
+    .result-score { font-family: 'Orbitron', sans-serif; font-size: 1.8rem; font-weight: 900; }
+    .result-score.win { color: var(--green); text-shadow: 0 0 10px rgba(57,255,20,0.2); }
+    .result-score.loss { color: #ff2d4a; }
+    .result-label { font-family: 'Share Tech Mono', monospace; font-size: 0.55rem; color: var(--muted); text-transform: uppercase; margin-top: 0.5rem; }
+
+    /* REVIEW BODY */
+    .review-body { max-width: 850px; margin: 0 auto; padding: 4rem 3rem; }
+    .review-body h2 { font-family: 'Orbitron', sans-serif; font-size: 1.1rem; font-weight: 700; color: var(--green); letter-spacing: 0.1em; margin-bottom: 1.5rem; margin-top: 3.5rem; padding-bottom: 0.5rem; border-bottom: 1px solid var(--border); text-transform: uppercase; }
+    .review-body p { font-size: 1rem; color: var(--muted); line-height: 1.9; margin-bottom: 1.5rem; font-weight: 300; }
+    .review-body p strong { color: var(--white); font-weight: 600; }
+
+    .highlight-box { background: var(--surface2); border: 1px solid var(--border); border-left: 4px solid var(--green); padding: 2rem; margin: 2.5rem 0; }
+    .highlight-title { font-family: 'Orbitron', sans-serif; font-size: 0.8rem; font-weight: 700; color: var(--green); letter-spacing: 0.1em; margin-bottom: 1rem; text-transform: uppercase; }
+    .highlight-text { font-size: 1.05rem; color: var(--white); line-height: 1.8; font-style: italic; }
+
+    /* STAFF TICKS */
+    .pros-cons { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; background: var(--border); border: 1px solid var(--border); margin: 3rem 0; }
+    .pros, .cons { background: var(--bg); padding: 2rem; }
+    .pc-title { font-family: 'Orbitron', sans-serif; font-size: 0.8rem; font-weight: 700; letter-spacing: 0.1em; margin-bottom: 1.5rem; }
+    .pros .pc-title { color: var(--green); }
+    .cons .pc-title { color: #ff2d4a; }
+    .pc-list { list-style: none; display: flex; flex-direction: column; gap: 0.8rem; }
+    .pc-list li { font-size: 0.85rem; color: var(--muted); font-weight: 300; padding-left: 1.5rem; position: relative; }
+    .pros .pc-list li::before { content: '✔'; position: absolute; left: 0; color: var(--green); font-weight: bold; }
+    .cons .pc-list li::before { content: '✖'; position: absolute; left: 0; color: #ff2d4a; font-weight: bold; }
+
+    .final-verdict { background: var(--surface); border: 1px solid var(--border); border-left: 4px solid var(--green); padding: 2.5rem; margin-top: 4rem; }
+    .fv-title { font-family: 'Orbitron', sans-serif; font-size: 0.9rem; font-weight: 700; color: var(--green); letter-spacing: 0.15em; margin-bottom: 1rem; text-transform: uppercase; }
+    .fv-text { font-size: 1.1rem; color: var(--white); line-height: 1.8; font-weight: 400; }
+
+    /* FOOTER */
+    footer { border-top: 1px solid rgba(0, 212, 255, 0.12); padding: 2.5rem 3rem; display: flex; justify-content: space-between; align-items: center; background: var(--bg2); margin-top: 6rem; }
+    .footer-name { font-family: 'Orbitron', sans-serif; font-size: 1rem; font-weight: 900; color: var(--cyan); }
+    .footer-copy { font-family: 'Share Tech Mono', monospace; font-size: 0.55rem; color: var(--muted); }
+
+    @media(max-width:768px){
+      nav{padding:0.9rem 1.5rem;}
+      .hero{padding:10rem 1.5rem 3rem;}
+      .review-body{padding:3rem 1.5rem;}
+      .pros-cons{grid-template-columns:1fr;}
+      .verdict-box{flex-direction:column;align-items:flex-start;}
+      footer{flex-direction:column;gap:1.5rem;text-align:center;}
+      .custom-cursor, .cursor-follower { display: none; }
+      html, body { cursor: auto; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="custom-cursor"></div>
+  <div class="cursor-follower"></div>
+
+  <nav>
+    <a href="index.html" class="nav-brand">
+      <img src="FalconDroplogo.png" class="nav-logo-img" alt="Falcon Drop Media">
+      <div>
+        <div class="nav-title">FALCONDROP MEDIA</div>
+        <div class="nav-sub">Media Criticism · Droppin' the Verdict ✔</div>
+      </div>
+    </a>
+    <a href="football.html" class="back-btn">← Football</a>
+  </nav>
+
+  <div class="hero">
+    <div class="review-tag">⚽ Club Analysis</div>
+    <h1 class="review-title">Chelsea's <span>Club World Cup</span> Run</h1>
+    <div class="review-meta">
+      <div class="meta-item">Tournament: <span>Club World Cup 2025</span></div>
+      <div class="meta-item">Result: <span>🏆 Champions</span></div>
+      <div class="meta-item">Reviewed by: <span>Pure Yeet</span></div>
+    </div>
+    <div class="verdict-box">
+      <div>
+        <div class="verdict-score">8.5</div>
+        <div class="verdict-label">/ 10 Pure Yeet Verdict</div>
+      </div>
+      <div>
+        <div class="verdict-text">Sublime. Pure Class. World Champions.</div>
+        <div class="verdict-sub">An absolutely perfect final performance</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="review-body">
+    <h2>The Journey to the Trophy</h2>
+    <div class="results-grid">
+      <div class="result-card"><div class="result-teams">CHE vs LAFC</div><div class="result-score win">2 — 0</div><div class="result-label">Group · Win</div></div>
+      <div class="result-card"><div class="result-teams">CHE vs Flamengo</div><div class="result-score loss">1 — 3</div><div class="result-label">Group · Loss</div></div>
+      <div class="result-card"><div class="result-teams">CHE vs PSG</div><div class="result-score win">3 — 0</div><div class="result-label">Final · Win 🏆</div></div>
+    </div>
+
+    <h2>A Night of Pure Mentality</h2>
+    <p>The Benfica game was the turning point. Rain, extra time, and immense pressure. Chelsea players didn't just play; they dug deep and finished it 4-1. That was the night the trophy felt possible.</p>
+
+    <div class="highlight-box">
+      <div class="highlight-title">🌧️ Defining Moment</div>
+      <p class="highlight-text">"Extra time. Rain. Benfica pushing. Chelsea holding. Then finishing it. That was the night I knew we were going all the way."</p>
+    </div>
+
+    <div class="pros-cons">
+      <div class="pros">
+        <div class="pc-title">+ WHAT WORKED</div>
+        <ul class="pc-list">
+          <li>Cole Palmer was world class</li>
+          <li>Grinded through rainy extra time</li>
+          <li>Destroyed PSG 3-0 in the Final</li>
+          <li>Mentality under pressure</li>
+        </ul>
+      </div>
+      <div class="cons">
+        <div class="pc-title">− WHAT DIDN'T</div>
+        <ul class="pc-list">
+          <li>Flamengo loss ruined perfect record</li>
+          <li>Defensive lapses in group stage</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="final-verdict">
+      <div class="fv-title">🟢 PURE YEET VERDICT — 8.5 / 10</div>
+      <p class="fv-text">Chelsea went to the Club World Cup and sent a clear message. When we are underdogs, we deliver. Palmer moving like prime Lampard and a tactical masterclass in the final. Absolutely sublime. 🦅🔵</p>
+    </div>
+  </div>
+
+  <footer>
+    <div class="footer-name">FALCONDROP MEDIA</div>
+    <div>
+        <p class="footer-copy">&copy; 2026 Falcon Drop Media — All Rights Reserved</p>
+        <p class="footer-copy">Designed by <span style="color:var(--cyan)">Pure Yeet</span> — Zimbabwe</p>
+    </div>
+  </footer>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const dot = document.querySelector('.custom-cursor');
+      const ring = document.querySelector('.cursor-follower');
+      document.addEventListener('mousemove', (e) => {
+        dot.style.left = e.clientX + 'px'; dot.style.top = e.clientY + 'px';
+        ring.style.left = e.clientX + 'px'; ring.style.top = e.clientY + 'px';
+      });
+    });
+  </script>
+</body>
+</html>

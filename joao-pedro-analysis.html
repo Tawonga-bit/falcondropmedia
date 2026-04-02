@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- Preconnect to fonts/external resources early -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+<!-- Tell browser to render fast, no telephone detection nonsense -->
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+<!-- Preload your main CSS and JS -->
+<link rel="preload" href="style.css" as="style">
+<link rel="preload" href="script.js" as="script">
+
+<!-- Your CSS link (after preload) -->
+<link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Joao Pedro — Most Improved Player Analysis — Falcon Drop Media</title>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Exo+2:wght@300;400;600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet"/>
+  <style>
+    /* GPU-accelerate anything that animates */
+.animated-element, .card, .hero, .ticker {
+  will-change: transform, opacity;
+  transform: translateZ(0); /* forces GPU layer */
+}
+
+/* Smooth rendering across all browsers */
+* {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Prevent layout shift on images */
+img {
+  content-visibility: auto;
+}
+    :root {
+      --bg:#060d14; --bg2:#091320; --surface:#0b1a28;
+      --border:rgba(57,255,20,0.12); --green:#39ff14;
+      --white:#e8f4ff; --muted:#4a7a9b;
+      --glow:0 0 20px rgba(57,255,20,0.45);
+    }
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+    html{scroll-behavior:smooth;}
+    body{background:var(--bg);color:var(--white);font-family:'Exo 2',sans-serif;overflow-x:hidden;}
+    nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:0.9rem 3rem;background:rgba(6,13,20,0.96);backdrop-filter:blur(20px);border-bottom:1px solid rgba(0,212,255,0.12);}
+    .nav-brand{display:flex;align-items:center;gap:0.85rem;text-decoration:none;}
+    .nav-logo-img{width:42px;height:42px;border-radius:50%;border:1.5px solid rgba(0,212,255,0.4);object-fit:cover;}
+    .nav-title{font-family:'Orbitron',monospace;font-size:0.95rem;font-weight:900;letter-spacing:0.12em;color:#00d4ff;text-shadow:0 0 20px rgba(0,212,255,0.45);}
+    .nav-sub{font-family:'Share Tech Mono',monospace;font-size:0.5rem;color:var(--muted);letter-spacing:0.2em;}
+    .back-btn{font-family:'Orbitron',monospace;font-size:0.6rem;font-weight:700;letter-spacing:0.15em;padding:0.5rem 1.2rem;border:1px solid var(--green);color:var(--green);text-decoration:none;text-transform:uppercase;transition:all 0.3s;}
+    .back-btn:hover{background:var(--green);color:var(--bg);}
+    .hero{padding:8rem 3rem 4rem;position:relative;border-bottom:1px solid var(--border);}
+    .hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 60% 60% at 50% 0%,rgba(57,255,20,0.07) 0%,transparent 70%);}
+    .review-tag{font-family:'Share Tech Mono',monospace;font-size:0.65rem;letter-spacing:0.35em;color:var(--green);text-transform:uppercase;margin-bottom:1rem;display:flex;align-items:center;gap:0.75rem;}
+    .review-tag::before{content:'';width:28px;height:1px;background:var(--green);}
+    .review-title{font-family:'Orbitron',monospace;font-size:clamp(2rem,5vw,4rem);font-weight:900;letter-spacing:0.04em;margin-bottom:1rem;line-height:1.1;}
+    .review-title span{color:var(--green);text-shadow:var(--glow);}
+    .review-meta{display:flex;align-items:center;gap:2rem;margin-bottom:2rem;flex-wrap:wrap;}
+    .meta-item{font-family:'Share Tech Mono',monospace;font-size:0.6rem;color:var(--muted);letter-spacing:0.2em;text-transform:uppercase;}
+    .meta-item span{color:var(--white);}
+    .verdict-box{display:inline-flex;align-items:center;gap:1.5rem;padding:1.5rem 2rem;background:var(--surface);border:1px solid var(--border);border-left:3px solid var(--green);}
+    .verdict-score{font-family:'Orbitron',monospace;font-size:3.5rem;font-weight:900;color:var(--green);text-shadow:var(--glow);line-height:1;}
+    .verdict-label{font-family:'Share Tech Mono',monospace;font-size:0.55rem;color:var(--muted);letter-spacing:0.2em;text-transform:uppercase;margin-top:0.3rem;}
+    .verdict-text{font-family:'Orbitron',monospace;font-size:1rem;font-weight:700;color:var(--white);}
+    .verdict-sub{font-size:0.8rem;color:var(--muted);font-weight:300;margin-top:0.3rem;}
+    .review-body{max-width:800px;margin:0 auto;padding:4rem 3rem;}
+    .review-body h2{font-family:'Orbitron',monospace;font-size:1.2rem;font-weight:700;color:var(--green);letter-spacing:0.05em;margin-bottom:1rem;margin-top:2.5rem;padding-bottom:0.5rem;border-bottom:1px solid var(--border);}
+    .review-body h2:first-child{margin-top:0;}
+    .review-body p{font-size:1rem;color:var(--muted);line-height:1.9;margin-bottom:1.2rem;font-weight:300;}
+    .review-body p strong{color:var(--white);font-weight:600;}
+    .highlight-box{background:var(--surface);border:1px solid var(--border);border-left:3px solid var(--green);padding:1.5rem;margin:2rem 0;}
+    .highlight-title{font-family:'Orbitron',monospace;font-size:0.8rem;font-weight:700;color:var(--green);letter-spacing:0.1em;margin-bottom:0.75rem;}
+    .highlight-text{font-size:0.95rem;color:var(--white);line-height:1.8;}
+    .pros-cons{display:grid;grid-template-columns:1fr 1fr;gap:1.5px;background:var(--border);border:1px solid var(--border);margin:2rem 0;}
+    .pros{background:var(--surface);padding:1.5rem;}
+    .cons{background:var(--surface);padding:1.5rem;}
+    .pc-title{font-family:'Orbitron',monospace;font-size:0.8rem;font-weight:700;letter-spacing:0.1em;margin-bottom:1rem;}
+    .pros .pc-title{color:#39ff14;}
+    .cons .pc-title{color:#ff2d4a;}
+    .pc-list{list-style:none;display:flex;flex-direction:column;gap:0.6rem;}
+    .pc-list li{font-size:0.85rem;color:var(--muted);font-weight:300;padding-left:1rem;position:relative;}
+    .pc-list li::before{content:'';position:absolute;left:0;top:50%;transform:translateY(-50%);width:4px;height:4px;border-radius:50%;}
+    .pros .pc-list li::before{background:#39ff14;}
+    .cons .pc-list li::before{background:#ff2d4a;}
+    .final-verdict{background:var(--surface);border:1px solid var(--border);border-left:3px solid var(--green);padding:2rem;margin-top:2rem;}
+    .fv-title{font-family:'Orbitron',monospace;font-size:0.8rem;font-weight:700;color:var(--green);letter-spacing:0.1em;margin-bottom:0.75rem;}
+    .fv-text{font-size:1rem;color:var(--white);line-height:1.8;font-weight:400;}
+    footer{border-top:1px solid rgba(0,212,255,0.12);padding:2rem 3rem;display:flex;justify-content:space-between;align-items:center;background:var(--bg2);margin-top:4rem;}
+    .footer-name{font-family:'Orbitron',monospace;font-size:1rem;font-weight:900;color:#00d4ff;}
+    .footer-copy{font-family:'Share Tech Mono',monospace;font-size:0.55rem;color:var(--muted);}
+    @media(max-width:768px){
+      nav{padding:0.9rem 1rem;}
+      .hero{padding:7rem 1.5rem 3rem;}
+      .review-body{padding:3rem 1.5rem;}
+      .pros-cons{grid-template-columns:1fr;}
+      .verdict-box{flex-direction:column;align-items:flex-start;}
+      footer{flex-direction:column;gap:1rem;text-align:center;}
+    }
+  </style>
+</head>
+<body>
+  <!-- Defer JS so it doesn't block rendering -->
+<script src="script.js" defer></script>
+defer = page renders first, JS runs after. That's the smooth feel.
+  <nav>
+    <a href="FalconDrop Media.html" class="nav-brand">
+      <img src="FalconDroplogo.png" class="nav-logo-img" alt="A stylized blue and white falcon head next to a video game controller symbol with circuit lines, representing a confident energetic media brand with text falcon drop droppin the verdict, on dark background"/>
+      <div>
+        <div class="nav-title">FALCONDROP MEDIA</div>
+        <div class="nav-sub">Media Criticism · Droppin' the Verdict✔</div>
+      </div>
+    </a>
+    <a href="football.html" class="back-btn">← Football</a>
+  </nav>
+
+  <div class="hero">
+    <div class="review-tag">⚽ Player Analysis</div>
+    <h1 class="review-title">Joao Pedro — <span>Most Improved — The Transformation is Real</span></h1>
+    <div class="review-meta">
+      <div class="meta-item">Club: <span>Chelsea FC</span></div>
+      <div class="meta-item">Season: <span>2024/25</span></div>
+      <div class="meta-item">Reviewed by: <span>Pure Yeet</span></div>
+    </div>
+    <div class="verdict-box">
+      <div>
+        <div class="verdict-score">8.7</div>
+        <div class="verdict-label">/ 10 Pure Yeet Verdict</div>
+      </div>
+      <div>
+        <div class="verdict-text">Chelsea's Best Signing This Season. No Debate.</div>
+        <div class="verdict-sub">Screamers. Worldies. Drogba vibes. The transformation is real.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="review-body">
+
+    <h2>Nobody Saw This Coming</h2>
+    <p>At the start of the season nobody was talking about <strong>Joao Pedro</strong> as Chelsea's most important player. He had disciplinary issues. He looked soft. He was going down looking for easy fouls instead of putting the ball in the net. Good link up play — yes. But soft. That was the word around him early on.</p>
+    <p>Fast forward to now and this man is scoring <strong>screamers and worldies</strong> and having some of the best individual performances in Europe. The transformation is one of the most impressive stories of the entire season and Pure Yeet is here to give him his flowers. 🌸</p>
+
+    <h2>From Soft to Drogba — The Transformation</h2>
+    <p>The early Joao Pedro at Chelsea was frustrating to watch as a fan. You could see the quality was there — the touch, the movement, the link up play was genuinely good. But <strong>he was soft</strong>. Going down for fouls instead of finishing. Not putting his body on the line. Not imposing himself.</p>
+    <p>And then something clicked. Suddenly this is a man scoring goals that remind you of <strong>Didier Drogba</strong> in his prime — powerful, clinical, unstoppable. The physicality came. The ruthlessness came. The goals came. And they did not stop coming.</p>
+
+    <div class="highlight-box">
+      <div class="highlight-title">⚽ The Napoli Away Game — That Was The Moment</div>
+      <p class="highlight-text">Away to Napoli. European football. Big stage. Joao Pedro showed up and delivered one of his best individual performances. Brilliant goals that secured Chelsea's place in the last 16 — no play offs needed. That night told you everything about where his confidence was.</p>
+    </div>
+
+    <h2>The Napoli Night — No Play Offs Needed</h2>
+    <p>The <strong>away game at Napoli</strong> was the moment that really showed what Joao Pedro had become. European football, hostile atmosphere, a game Chelsea needed to win — and he delivered. Brilliant goals that secured Chelsea in the last 16 without needing play offs.</p>
+    <p>That is the kind of performance that defines a player's season. Big stage. Big moment. Big goals. Joao Pedro did not flinch. That is not the same soft player from the start of the season — that is a player who has found himself completely.</p>
+
+    <h2>Screamers and Worldies — The Goals Are Special</h2>
+    <p>Let's talk about the actual goals because they deserve their own section. <strong>Joao Pedro is not just scoring tap ins</strong> — this man is hitting screamers from distance, finishing with power, and producing worldies that make you rewatch the clip three times. The quality of his goals this season has been something else.</p>
+    <p>The Drogba comparison is not made lightly. Drogba was a player who could win a game on his own through sheer individual brilliance and physical dominance. When Joao Pedro is in this form he carries that same energy. Chelsea fans know exactly what that means.</p>
+
+    <div class="pros-cons">
+      <div class="pros">
+        <div class="pc-title">&#43; WHAT WORKS</div>
+        <ul class="pc-list">
+          <li>Screamers and worldies — goals are special</li>
+          <li>Napoli away performance was elite</li>
+          <li>Drogba-like physicality and ruthlessness</li>
+          <li>Most improved player in the squad</li>
+          <li>Big game mentality fully developed</li>
+        </ul>
+      </div>
+      <div class="cons">
+        <div class="pc-title">&#8722; WHAT DIDN'T</div>
+        <ul class="pc-list">
+          <li>Slow start — looked soft early season</li>
+          <li>Disciplinary issues cost him early on</li>
+          <li>Still goes down too easily sometimes</li>
+        </ul>
+      </div>
+    </div>
+
+    <h2>Final Verdict</h2>
+    <div class="final-verdict">
+      <div class="fv-title">&#128994; PURE YEET VERDICT — 8.7 / 10</div>
+      <p class="fv-text">Joao Pedro is Chelsea's most improved player and best signing of this season. Nobody saw this coming. He started soft, had disciplinary issues, was looking for easy fouls instead of goals. And then he flipped the switch completely. Screamers. Worldies. Drogba vibes. That Napoli away performance where he scored brilliant goals to put us in the last 16 with no play offs needed — that was the night the whole world saw what Chelsea had on their hands. The transformation is real and Pure Yeet is giving him full credit. 🦅🔵</p>
+    </div>
+  </div>
+
+  <footer>
+    <div class="footer-name">FALCONDROP MEDIA</div>
+    <p class="footer-copy">&copy; 2026 Falcon Drop Media — All Rights Reserved</p>
+    <p class="footer-copy">Designed by <span style="color:#00d4ff">Pure Yeet</span> — Zimbabwe</p>
+  </footer>
+  <style>
+.fade-in {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.5s ease, transform 0.5s ease;
+}
+
+.fade-in.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+  </style>
+  <script>
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting) e.target.classList.add('visible');
+  });
+}, { threshold: 0.1 });
+
+document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+  </script>
+</body>
+</html>

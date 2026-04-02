@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Football Analysis — Falcon Drop Media</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Exo+2:wght@300;400;600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+
+  <style>
+    /* PERFORMANCE & SMOOTHING */
+    * {
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      box-sizing: border-box; margin: 0; padding: 0;
+    }
+
+    :root {
+      --bg: #060d14; 
+      --bg2: #091320; 
+      --surface: #0b1a28; 
+      --surface2: #0f2236;
+      --border: rgba(57, 255, 20, 0.15); 
+      --green: #39ff14; 
+      --cyan: #00d4ff; 
+      --white: #e8f4ff; 
+      --muted: #4a7a9b;
+      --glow-green: 0 0 20px rgba(57, 255, 20, 0.35);
+    }
+
+    /* TACTICAL GREEN CURSOR */
+    html, body { cursor: none; scroll-behavior: smooth; }
+    .custom-cursor {
+      width: 6px; height: 6px; background: var(--green); border-radius: 50%;
+      position: fixed; pointer-events: none; z-index: 10000;
+      transform: translate(-50%, -50%); box-shadow: var(--glow-green);
+    }
+    .cursor-follower {
+      width: 26px; height: 26px; border: 1px solid rgba(57, 255, 20, 0.4);
+      position: fixed; pointer-events: none; z-index: 9999;
+      transform: translate(-50%, -50%); transition: transform 0.08s ease-out;
+      display: flex; align-items: center; justify-content: center;
+    }
+    /* Adding crosshair notches to the follower */
+    .cursor-follower::before, .cursor-follower::after {
+      content: ''; position: absolute; background: rgba(57, 255, 20, 0.4);
+    }
+    .cursor-follower::before { width: 1px; height: 100%; }
+    .cursor-follower::after { width: 100%; height: 1px; }
+
+    body { background: var(--bg); color: var(--white); font-family: 'Exo 2', sans-serif; overflow-x: hidden; }
+
+    /* NAVIGATION */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0.9rem 3rem; background: rgba(6, 13, 20, 0.96);
+      backdrop-filter: blur(20px); border-bottom: 1px solid rgba(0, 212, 255, 0.12);
+    }
+    .nav-brand { display: flex; align-items: center; gap: 0.85rem; text-decoration: none; }
+    .nav-logo-img { width: 42px; height: 42px; border-radius: 50%; border: 1.5px solid rgba(0, 212, 255, 0.4); object-fit: cover; }
+    .nav-title { font-family: 'Orbitron', sans-serif; font-size: 0.95rem; font-weight: 900; letter-spacing: 0.12em; color: var(--cyan); text-shadow: 0 0 20px rgba(0, 212, 255, 0.4); }
+    .nav-sub { font-family: 'Share Tech Mono', monospace; font-size: 0.5rem; color: var(--muted); letter-spacing: 0.2em; }
+    
+    .back-btn {
+      font-family: 'Orbitron', sans-serif; font-size: 0.6rem; font-weight: 700; letter-spacing: 0.15em;
+      padding: 0.5rem 1.2rem; border: 1px solid var(--green); color: var(--green);
+      text-decoration: none; text-transform: uppercase; transition: 0.3s;
+    }
+    .back-btn:hover { background: var(--green); color: var(--bg); box-shadow: var(--glow-green); }
+
+    /* HERO */
+    .hero { padding: 12rem 3rem 6rem; position: relative; }
+    .hero::before {
+      content: ''; position: absolute; inset: 0;
+      background: radial-gradient(ellipse 60% 60% at 50% 0%, rgba(57, 255, 20, 0.08) 0%, transparent 70%);
+    }
+    .page-tag { font-family: 'Share Tech Mono', monospace; font-size: 0.65rem; letter-spacing: 0.35em; color: var(--green); text-transform: uppercase; margin-bottom: 1rem; display: flex; align-items: center; gap: 0.75rem; }
+    .page-tag::before { content: ''; width: 28px; height: 1px; background: var(--green); }
+    .page-title { font-family: 'Orbitron', sans-serif; font-size: clamp(2.5rem, 6vw, 4.5rem); font-weight: 900; letter-spacing: 0.02em; margin-bottom: 1rem; text-transform: uppercase; }
+    .page-title span { color: var(--green); text-shadow: var(--glow-green); }
+    .page-desc { font-size: 1rem; color: var(--muted); font-weight: 300; max-width: 550px; line-height: 1.8; }
+
+    /* ANALYSIS GRID */
+    .section-container { padding: 0 3rem 6rem; }
+    .sec-label { font-family: 'Share Tech Mono', monospace; font-size: 0.6rem; letter-spacing: 0.35em; text-transform: uppercase; color: var(--muted); margin-bottom: 2rem; display: flex; align-items: center; gap: 1rem; }
+    .sec-label::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+
+    .analysis-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 2rem; margin-bottom: 5rem; }
+    .analysis-card { 
+      background: var(--surface); border: 1px solid var(--border); border-left: 4px solid var(--green); 
+      padding: 2.5rem 2rem; text-decoration: none; transition: 0.4s cubic-bezier(0.165, 0.84, 0.44, 1); 
+      position: relative; overflow: hidden;
+    }
+    .analysis-card:hover { transform: translateY(-8px); background: var(--surface2); border-color: var(--green); box-shadow: var(--glow-green); }
+    .analysis-card::after { content: '→'; position: absolute; bottom: 1.5rem; right: 1.5rem; color: var(--green); font-family: 'Orbitron'; font-size: 1.2rem; opacity: 0; transition: 0.3s; }
+    .analysis-card:hover::after { opacity: 1; right: 2rem; }
+
+    .card-category { font-family: 'Share Tech Mono', monospace; font-size: 0.6rem; color: var(--green); letter-spacing: 0.2em; margin-bottom: 1.2rem; display: block; }
+    .card-title { font-family: 'Orbitron', sans-serif; font-size: 1.25rem; color: var(--white); margin-bottom: 0.8rem; text-transform: uppercase; line-height: 1.3; }
+    .card-excerpt { font-size: 0.85rem; color: var(--muted); line-height: 1.7; font-weight: 300; }
+
+    /* COMING SOON */
+    .coming-soon { text-align: center; padding: 6rem 2rem; border: 1px dashed rgba(57, 255, 20, 0.2); background: rgba(57, 255, 20, 0.02); border-radius: 4px; }
+    .cs-icon { font-size: 3.5rem; margin-bottom: 1.5rem; display: inline-block; animation: pulse 2.5s infinite ease-in-out; }
+    .cs-title { font-family: 'Orbitron', sans-serif; font-size: 1.4rem; font-weight: 900; color: var(--green); text-shadow: var(--glow-green); margin-bottom: 0.75rem; text-transform: uppercase; }
+    .cs-desc { font-size: 0.95rem; color: var(--muted); font-weight: 300; line-height: 1.8; }
+
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); opacity: 1; filter: drop-shadow(var(--glow-green)); }
+      50% { transform: scale(1.1); opacity: 0.7; filter: drop-shadow(0 0 0px transparent); }
+    }
+
+    /* FOOTER */
+    footer { border-top: 1px solid rgba(0, 212, 255, 0.12); padding: 2.5rem 3rem; display: flex; justify-content: space-between; align-items: center; background: var(--bg2); }
+    .footer-name { font-family: 'Orbitron', sans-serif; font-size: 1rem; font-weight: 900; color: var(--cyan); }
+    .footer-copy { font-family: 'Share Tech Mono', monospace; font-size: 0.55rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.1em; }
+
+    /* FADE IN CLASSES */
+    .fade-in { opacity: 0; transform: translateY(20px); transition: 0.7s ease-out; }
+    .fade-in.visible { opacity: 1; transform: translateY(0); }
+
+    @media(max-width:768px){
+      nav { padding: 0.9rem 1.5rem; }
+      .hero { padding: 10rem 1.5rem 4rem; }
+      .section-container { padding: 0 1.5rem 4rem; }
+      footer { flex-direction: column; gap: 1.5rem; text-align: center; }
+      .custom-cursor, .cursor-follower { display: none; }
+      html, body { cursor: auto; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="custom-cursor"></div>
+  <div class="cursor-follower"></div>
+
+  <nav>
+    <a href="index.html" class="nav-brand">
+      <img src="FalconDroplogo.png" class="nav-logo-img" alt="Falcon Drop Media">
+      <div>
+        <div class="nav-title">FALCONDROP MEDIA</div>
+        <div class="nav-sub">Media Criticism · Droppin' the Verdict ✔</div>
+      </div>
+    </a>
+    <a href="index.html" class="back-btn">← Home</a>
+  </nav>
+
+  <div class="hero fade-in">
+    <div class="page-tag">Section 02</div>
+    <h1 class="page-title">Football <span>Analysis</span></h1>
+    <p class="page-desc">Tactical breakdowns, player performance metrics, and the raw verdicts on the beautiful game's biggest moments.</p>
+  </div>
+
+  <div class="section-container">
+    <div class="sec-label fade-in">Latest Breakdown</div>
+    
+    <div class="analysis-grid">
+      <a href="chelsea-cwc.html" class="analysis-card fade-in">
+        <span class="card-category">CLUB WORLD CUP 2025</span>
+        <h2 class="card-title">Chelsea's Road to Glory</h2>
+        <p class="card-excerpt">A deep-dive into how the Blues conquered the world stage, dissecting Cole Palmer's role and the rainy night against Benfica.</p>
+      </a>
+      
+      <div class="analysis-card fade-in" style="opacity: 0.4; pointer-events: none; border-left-color: var(--muted);">
+        <span class="card-category">UPCOMING</span>
+        <h2 class="card-title">Tactical Archive</h2>
+        <p class="card-excerpt">Historical breakdowns of classic matches currently being digitized for the platform.</p>
+      </div>
+    </div>
+
+    <div class="sec-label fade-in">Future Intel</div>
+    <div class="coming-soon fade-in">
+      <span class="cs-icon">⚽</span>
+      <div class="cs-title">Live Verdicts Coming Soon</div>
+      <p class="cs-desc">The Falcon is analyzing the pitch data. <br/>Comprehensive tactical reports dropping for the upcoming season. 🦅</p>
+    </div>
+  </div>
+
+  <footer>
+    <div class="footer-name">FALCONDROP MEDIA</div>
+    <div>
+        <p class="footer-copy">&copy; 2026 Falcon Drop Media — All Rights Reserved</p>
+        <p class="footer-copy">Designed by <span style="color:var(--cyan)">Pure Yeet</span> — Zimbabwe</p>
+    </div>
+  </footer>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      // Intersection Observer for scroll animations
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+          }
+        });
+      }, { threshold: 0.1 });
+
+      document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+
+      // Tactical Green Cursor Logic
+      const dot = document.querySelector('.custom-cursor');
+      const ring = document.querySelector('.cursor-follower');
+      
+      document.addEventListener('mousemove', (e) => {
+        dot.style.left = e.clientX + 'px';
+        dot.style.top = e.clientY + 'px';
+        ring.style.left = e.clientX + 'px';
+        ring.style.top = e.clientY + 'px';
+      });
+
+      // Simple hover effect for cards and buttons
+      const interactives = document.querySelectorAll('.analysis-card, .back-btn, .nav-brand');
+      interactives.forEach(el => {
+        el.addEventListener('mouseenter', () => {
+          ring.style.transform = 'translate(-50%, -50%) scale(1.5)';
+          ring.style.borderColor = 'white';
+        });
+        el.addEventListener('mouseleave', () => {
+          ring.style.transform = 'translate(-50%, -50%) scale(1)';
+          ring.style.borderColor = 'rgba(57, 255, 20, 0.4)';
+        });
+      });
+    });
+  </script>
+</body>
+</html>

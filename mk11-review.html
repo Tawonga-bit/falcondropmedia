@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mortal Kombat 11 Review — Falcon Drop Media</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Exo+2:wght@300;400;600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+
+  <style>
+    /* GPU-accelerate animations */
+    .hero, .ticker, .verdict-box, .pros-cons, .final-verdict {
+      will-change: transform, opacity;
+      transform: translateZ(0);
+    }
+
+    * {
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      box-sizing: border-box; 
+      margin: 0; padding: 0;
+    }
+
+    :root {
+      --bg: #060d14; 
+      --bg2: #091320; 
+      --surface: #0b1a28; 
+      --surface2: #0f2236;
+      --border: rgba(0,212,255,0.12); 
+      --cyan: #00d4ff; 
+      --red: #ff2d4a;
+      --white: #e8f4ff; 
+      --muted: #4a7a9b;
+      --glow: 0 0 20px rgba(0,212,255,0.45);
+      --glow-red: 0 0 20px rgba(255,45,74,0.45);
+    }
+
+    html { scroll-behavior: smooth; }
+    body {
+      background: var(--bg);
+      color: var(--white);
+      font-family: 'Exo 2', sans-serif;
+      overflow-x: hidden;
+      cursor: none; /* Hide default cursor for Falcon Glider */
+    }
+
+    /* THE FALCON GLIDER CURSOR */
+    .cursor-dot {
+      width: 6px; height: 6px; background: var(--cyan);
+      border-radius: 50%; position: fixed; pointer-events: none;
+      z-index: 20001; box-shadow: 0 0 10px var(--cyan);
+      left: 0; top: 0; transform: translate(-50%, -50%);
+    }
+
+    .cursor-ring {
+      width: 36px; height: 36px;
+      border: 1.5px solid rgba(0, 212, 255, 0.4);
+      border-radius: 50%; position: fixed; pointer-events: none;
+      z-index: 20000; left: 0; top: 0; transform: translate(-50%, -50%);
+      transition: width 0.3s ease, height 0.3s ease, border 0.3s ease, background 0.3s ease;
+    }
+
+    .cursor-ring.active {
+      width: 60px; height: 60px;
+      background: rgba(0, 212, 255, 0.05);
+      border-color: var(--cyan);
+    }
+
+    /* THE GLOWING TICK */
+    .verified-tick {
+      color: var(--cyan);
+      text-shadow: 0 0 10px var(--cyan);
+      font-weight: 900;
+      margin-left: 4px;
+      display: inline-block;
+    }
+
+    /* NAV */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0.9rem 3rem; background: rgba(6,13,20,0.96);
+      backdrop-filter: blur(20px); border-bottom: 1px solid var(--border);
+    }
+    .nav-brand { display: flex; align-items: center; gap: 0.85rem; text-decoration: none; }
+    .nav-logo-img { width: 42px; height: 42px; border-radius: 50%; border: 1.5px solid rgba(0,212,255,0.4); object-fit: cover; }
+    .nav-title { font-family: 'Orbitron', sans-serif; font-size: 0.95rem; font-weight: 900; letter-spacing: 0.12em; color: var(--cyan); text-shadow: var(--glow); }
+    .nav-sub { font-family: 'Share Tech Mono', monospace; font-size: 0.5rem; color: var(--muted); letter-spacing: 0.2em; text-transform: uppercase; }
+    
+    .back-btn { 
+      font-family: 'Orbitron', sans-serif; font-size: 0.6rem; font-weight: 700; 
+      letter-spacing: 0.15em; padding: 0.5rem 1.2rem; border: 1px solid var(--red); 
+      color: var(--red); text-decoration: none; text-transform: uppercase; transition: 0.3s; 
+    }
+    .back-btn:hover { background: var(--red); color: var(--bg); box-shadow: var(--glow-red); }
+
+    /* HERO */
+    .hero { padding: 10rem 3rem 4rem; position: relative; }
+    .hero::before { content:''; position:absolute; inset:0; background:radial-gradient(ellipse 60% 60% at 50% 0%,rgba(255,45,74,0.07) 0%,transparent 70%); }
+    .review-tag { font-family: 'Share Tech Mono', monospace; font-size: 0.65rem; letter-spacing: 0.35em; color: var(--red); text-transform: uppercase; margin-bottom: 1rem; display: flex; align-items: center; gap: 0.75rem; }
+    .review-tag::before { content: ''; width: 28px; height: 1px; background: var(--red); }
+    .review-title { font-family: 'Orbitron', sans-serif; font-size: clamp(2.5rem, 5vw, 4rem); font-weight: 900; letter-spacing: 0.04em; margin-bottom: 1rem; line-height: 1; }
+    .review-title span { color: var(--red); text-shadow: var(--glow-red); }
+    .review-meta { display: flex; align-items: center; gap: 2rem; margin-bottom: 2rem; flex-wrap: wrap; }
+    .meta-item { font-family: 'Share Tech Mono', monospace; font-size: 0.6rem; color: var(--muted); letter-spacing: 0.2em; text-transform: uppercase; }
+    .meta-item span { color: var(--white); }
+
+    /* VERDICT BOX */
+    .verdict-box { display: inline-flex; align-items: center; gap: 1.5rem; padding: 1.5rem 2rem; background: var(--surface); border: 1px solid var(--border); border-left: 3px solid var(--red); }
+    .verdict-score { font-family: 'Orbitron', sans-serif; font-size: 3.5rem; font-weight: 900; color: var(--red); text-shadow: var(--glow-red); line-height: 1; }
+    .verdict-label { font-family: 'Share Tech Mono', monospace; font-size: 0.55rem; color: var(--muted); letter-spacing: 0.2em; text-transform: uppercase; }
+    .verdict-text { font-family: 'Orbitron', sans-serif; font-size: 1rem; font-weight: 700; color: var(--white); }
+    .verdict-sub { font-size: 0.8rem; color: var(--muted); font-weight: 300; margin-top: 0.3rem; }
+
+    /* TICKER */
+    .ticker { background: var(--surface2); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); padding: 0.8rem 0; overflow: hidden; white-space: nowrap; position: relative; z-index: 2; }
+    .ticker-inner { display: inline-flex; animation: ticker 25s linear infinite; }
+    .ticker-item { font-family: 'Share Tech Mono', monospace; font-size: 0.65rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--muted); padding: 0 3rem; }
+    .ticker-item span { color: var(--red); }
+    @keyframes ticker { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+
+    /* REVIEW CONTENT */
+    .review-body { max-width: 800px; margin: 0 auto; padding: 4rem 3rem; }
+    .review-body h2 { font-family: 'Orbitron', sans-serif; font-size: 1.2rem; font-weight: 700; color: var(--red); letter-spacing: 0.05em; margin-bottom: 1.5rem; margin-top: 3rem; padding-bottom: 0.5rem; border-bottom: 1px solid var(--border); }
+    .review-body p { font-size: 1.05rem; color: var(--muted); line-height: 1.9; margin-bottom: 1.5rem; font-weight: 300; }
+    .review-body p strong { color: var(--white); font-weight: 600; }
+
+    .pros-cons { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5px; background: var(--border); border: 1px solid var(--border); margin: 3rem 0; }
+    .pros, .cons { background: var(--surface); padding: 2rem; }
+    .pc-title { font-family: 'Orbitron', sans-serif; font-size: 0.8rem; font-weight: 700; letter-spacing: 0.1em; margin-bottom: 1.5rem; }
+    .pros .pc-title { color: #39ff14; }
+    .cons .pc-title { color: var(--red); }
+    .pc-list { list-style: none; display: flex; flex-direction: column; gap: 0.8rem; }
+    .pc-list li { font-size: 0.9rem; color: var(--muted); font-weight: 300; padding-left: 1.2rem; position: relative; }
+    .pc-list li::before { content: ''; position: absolute; left: 0; top: 50%; transform: translateY(-50%); width: 4px; height: 4px; border-radius: 50%; }
+    .pros .pc-list li::before { background: #39ff14; box-shadow: 0 0 8px #39ff14; }
+    .cons .pc-list li::before { background: var(--red); box-shadow: 0 0 8px var(--red); }
+
+    .final-verdict { background: var(--surface); border: 1px solid var(--border); border-left: 3px solid var(--red); padding: 2.5rem; margin-top: 4rem; }
+    .fv-title { font-family: 'Orbitron', sans-serif; font-size: 0.85rem; font-weight: 700; color: var(--red); letter-spacing: 0.15em; margin-bottom: 1rem; }
+    .fv-text { font-size: 1.1rem; color: var(--white); line-height: 1.8; font-weight: 400; }
+
+    /* FOOTER */
+    footer { border-top: 1px solid var(--border); padding: 3rem; display: flex; justify-content: space-between; align-items: center; background: var(--bg2); margin-top: 6rem; }
+    .footer-name { font-family: 'Orbitron', sans-serif; font-size: 1.1rem; font-weight: 900; color: var(--cyan); }
+    .footer-copy { font-family: 'Share Tech Mono', monospace; font-size: 0.6rem; color: var(--muted); line-height: 1.8; }
+
+    /* MOBILE ADJUSTMENTS */
+    @media(max-width:768px){
+      nav { padding: 1rem 1.5rem; }
+      .hero { padding: 8rem 1.5rem 3rem; }
+      .review-body { padding: 2rem 1.5rem; }
+      .pros-cons { grid-template-columns: 1fr; }
+      .verdict-box { flex-direction: column; align-items: flex-start; width: 100%; }
+      footer { flex-direction: column; gap: 1.5rem; text-align: center; }
+      .cursor-dot, .cursor-ring { display: none; }
+      body { cursor: auto; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="cursor-dot"></div>
+  <div class="cursor-ring"></div>
+
+  <nav>
+    <a href="index.html" class="nav-brand">
+      <img src="FalconDroplogo.png" class="nav-logo-img" alt="Falcon Drop Media Logo"/>
+      <div>
+        <div class="nav-title">FALCON DROP MEDIA</div>
+        <div class="nav-sub">Media Criticism · Droppin' the Verdict <span class="verified-tick">✔</span></div>
+      </div>
+    </a>
+    <a href="index.html#featured" class="back-btn">← Back to Feed</a>
+  </nav>
+
+  <div class="hero">
+    <div class="review-tag">🎮 Game Review</div>
+    <h1 class="review-title">Mortal Kombat <span>11</span></h1>
+    <div class="review-meta">
+      <div class="meta-item">Platform: <span>PS4 / Xbox / PC</span></div>
+      <div class="meta-item">Developer: <span>NetherRealm Studios</span></div>
+      <div class="meta-item">Reviewed by: <span>Pure Yeet</span></div>
+      <div class="meta-item">Date: <span>April 2026</span></div>
+    </div>
+    <div class="verdict-box">
+      <div>
+        <div class="verdict-score">8.0</div>
+        <div class="verdict-label">/ 10 VERDICT</div>
+      </div>
+      <div>
+        <div class="verdict-text">Ruthless. Brutal. Addictive.</div>
+        <div class="verdict-sub">The Falcon has landed. 🦅</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="ticker">
+    <div class="ticker-inner">
+      <span class="ticker-item"><span>LIVE:</span> MK11 VERDICT LANDED</span>
+      <span class="ticker-item"><span>STATUS:</span> RUTHLESS BRUTALITY</span>
+      <span class="ticker-item"><span>CRITIC:</span> PURE YEET</span>
+      <span class="ticker-item"><span>NEXT REVIEW:</span> GEOMETRY DASH LITE</span>
+      <span class="ticker-item"><span>LIVE:</span> MK11 VERDICT LANDED</span>
+      <span class="ticker-item"><span>STATUS:</span> RUTHLESS BRUTALITY</span>
+    </div>
+  </div>
+
+  <div class="review-body">
+    <h2>Overview</h2>
+    <p>Let me be straight with you — <strong>Mortal Kombat 11</strong> is one of the most ruthless fighting games ever made. NetherRealm Studios didn't come to play. They came to finish you. The fatalities are gruesome, the roster is stacked, and the two-player experience is the kind of thing that ends friendships and starts arguments.</p>
+
+    <h2>The Two-Player Experience</h2>
+    <p>This is where MK11 is at its absolute best and most infuriating at the same time. <strong>Two-player mode is pure chaos</strong> — you can try every move in your arsenal, experiment with combos, and feel like you're getting somewhere — and then your opponent hits you with one single move and it's over.</p>
+    <p>That one-move problem is real. Certain characters have moves that are so powerful and so easy to spam that the whole match can feel one-sided. But when you figure out the counter? That feeling is unmatched.</p>
+
+    <div class="pros-cons">
+      <div class="pros">
+        <div class="pc-title">+ WHAT WORKS</div>
+        <ul class="pc-list">
+          <li>Two-player mode is wildly entertaining</li>
+          <li>Fighting feels weighty and impactful</li>
+          <li>Massive and diverse roster</li>
+          <li>Fatalities are gloriously brutal</li>
+        </ul>
+      </div>
+      <div class="cons">
+        <div class="pc-title">− WHAT DOESN'T</div>
+        <ul class="pc-list">
+          <li>Move spamming ruins competitive matches</li>
+          <li>One overpowered move can decide everything</li>
+          <li>Steep learning curve for newcomers</li>
+        </ul>
+      </div>
+    </div>
+
+    <h2>Final Verdict</h2>
+    <div class="final-verdict">
+      <div class="fv-title">🟢 PURE YEET VERDICT — 8.0 / 10</div>
+      <p class="fv-text">Mortal Kombat 11 is ruthless, chaotic, and absolutely addictive — especially in two-player. When MK11 clicks, it is one of the best fighting games ever made. When it doesn't, it will test your patience. Either way — the Falcon respects the brutality. 🦅</p>
+    </div>
+  </div>
+
+  <footer>
+    <div class="footer-name">FALCON DROP MEDIA</div>
+    <div>
+      <p class="footer-copy">&copy; 2026 Falcon Drop Media — Harare, Zimbabwe</p>
+      <p class="footer-copy">Droppin' the Verdict <span class="verified-tick">✔</span></p>
+      <p class="footer-copy">Designed by <span style="color:var(--cyan)">Pure Yeet</span></p>
+    </div>
+  </footer>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const dot = document.querySelector('.cursor-dot');
+      const ring = document.querySelector('.cursor-ring');
+      
+      let mouseX = -100, mouseY = -100;
+      let ringX = -100, ringY = -100;
+
+      document.addEventListener('mousemove', (e) => {
+        mouseX = e.clientX;
+        mouseY = e.clientY;
+        dot.style.transform = `translate(${mouseX}px, ${mouseY}px) translate(-50%, -50%)`;
+      });
+
+      function animate() {
+        let dx = mouseX - ringX;
+        let dy = mouseY - ringY;
+        ringX += dx * 0.15;
+        ringY += dy * 0.15;
+        ring.style.transform = `translate(${ringX}px, ${ringY}px) translate(-50%, -50%)`;
+        requestAnimationFrame(animate);
+      }
+      animate();
+
+      // Interactions for cursor expansion
+      const interactives = document.querySelectorAll('a, .pros, .cons, .verdict-box');
+      interactives.forEach(el => {
+        el.addEventListener('mouseenter', () => ring.classList.add('active'));
+        el.addEventListener('mouseleave', () => ring.classList.remove('active'));
+      });
+    });
+  </script>
+</body>
+</html>

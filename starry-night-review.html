@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Starry Night Review — Falcon Drop Media</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Exo+2:wght@300;400;600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="style.css">
+    <style>
+        /* GPU Acceleration */
+        .hero, .verdict-box, .highlight-box, .pros-cons, .final-verdict {
+            will-change: transform, opacity;
+            transform: translateZ(0);
+        }
+
+        * {
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            box-sizing: border-box; margin: 0; padding: 0;
+        }
+
+        :root {
+            --bg: #060d14; 
+            --bg2: #091320; 
+            --surface: #0b1a28; 
+            --border: rgba(192, 132, 252, 0.15); 
+            --purple: #c084fc;
+            --cyan: #00d4ff;
+            --white: #e8f4ff; 
+            --muted: #4a7a9b;
+            --glow: 0 0 20px rgba(192, 132, 252, 0.45);
+        }
+
+        /* GLOBAL ART CURSOR */
+        html, body { cursor: none; scroll-behavior: smooth; }
+        .custom-cursor {
+            width: 8px; height: 8px; background: var(--purple); border-radius: 50%;
+            position: fixed; pointer-events: none; z-index: 10000;
+            transform: translate(-50%, -50%); box-shadow: var(--glow);
+        }
+        .cursor-follower {
+            width: 30px; height: 30px; border: 1.5px solid rgba(192, 132, 252, 0.3);
+            border-radius: 50%; position: fixed; pointer-events: none; z-index: 9999;
+            transform: translate(-50%, -50%); transition: transform 0.1s ease-out;
+        }
+
+        body { background: var(--bg); color: var(--white); font-family: 'Exo 2', sans-serif; overflow-x: hidden; }
+
+        /* NAV */
+        nav {
+            position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+            display: flex; align-items: center; justify-content: space-between;
+            padding: 0.9rem 3rem; background: rgba(6, 13, 20, 0.96);
+            backdrop-filter: blur(20px); border-bottom: 1px solid rgba(0, 212, 255, 0.12);
+        }
+        .nav-brand { display: flex; align-items: center; gap: 0.85rem; text-decoration: none; }
+        .nav-logo-img { width: 42px; height: 42px; border-radius: 50%; border: 1.5px solid rgba(0, 212, 255, 0.4); object-fit: cover; }
+        .nav-title { font-family: 'Orbitron', sans-serif; font-size: 0.95rem; font-weight: 900; letter-spacing: 0.12em; color: var(--cyan); text-shadow: 0 0 20px rgba(0, 212, 255, 0.4); }
+        .nav-sub { font-family: 'Share Tech Mono', monospace; font-size: 0.5rem; color: var(--muted); letter-spacing: 0.2em; }
+        
+        .back-btn {
+            font-family: 'Orbitron', sans-serif; font-size: 0.6rem; font-weight: 700; letter-spacing: 0.15em;
+            padding: 0.5rem 1.2rem; border: 1px solid var(--purple); color: var(--purple);
+            text-decoration: none; text-transform: uppercase; transition: all 0.3s;
+        }
+        .back-btn:hover { background: var(--purple); color: var(--bg); box-shadow: var(--glow); }
+
+        /* HERO */
+        .hero { padding: 12rem 3rem 4rem; position: relative; border-bottom: 1px solid var(--border); }
+        .hero::before {
+            content: ''; position: absolute; inset: 0;
+            background: radial-gradient(ellipse 60% 60% at 50% 0%, rgba(192, 132, 252, 0.07) 0%, transparent 70%);
+        }
+        .review-tag { font-family: 'Share Tech Mono', monospace; font-size: 0.65rem; letter-spacing: 0.35em; color: var(--purple); text-transform: uppercase; margin-bottom: 1rem; display: flex; align-items: center; gap: 0.75rem; }
+        .review-tag::before { content: ''; width: 28px; height: 1px; background: var(--purple); }
+        .review-title { font-family: 'Orbitron', sans-serif; font-size: clamp(2rem, 5vw, 4rem); font-weight: 900; letter-spacing: 0.04em; margin-bottom: 1rem; line-height: 1.1; }
+        .review-title span { color: var(--purple); text-shadow: var(--glow); }
+
+        .review-meta { display: flex; align-items: center; gap: 2rem; margin-bottom: 2rem; flex-wrap: wrap; }
+        .meta-item { font-family: 'Share Tech Mono', monospace; font-size: 0.6rem; color: var(--muted); letter-spacing: 0.2em; text-transform: uppercase; }
+        .meta-item span { color: var(--white); }
+
+        .verdict-box { display: inline-flex; align-items: center; gap: 1.5rem; padding: 1.5rem 2rem; background: var(--surface); border: 1px solid var(--border); border-left: 3px solid var(--purple); }
+        .verdict-score { font-family: 'Orbitron', sans-serif; font-size: 3.5rem; font-weight: 900; color: var(--purple); text-shadow: var(--glow); line-height: 1; }
+        .verdict-label { font-family: 'Share Tech Mono', monospace; font-size: 0.55rem; color: var(--muted); letter-spacing: 0.2em; text-transform: uppercase; margin-top: 0.3rem; }
+        .verdict-text { font-family: 'Orbitron', sans-serif; font-size: 1rem; font-weight: 700; color: var(--white); }
+        .verdict-sub { font-size: 0.8rem; color: var(--muted); font-weight: 300; margin-top: 0.3rem; }
+
+        /* BODY CONTENT */
+        .review-body { max-width: 800px; margin: 0 auto; padding: 4rem 3rem; }
+        .review-body h2 { font-family: 'Orbitron', sans-serif; font-size: 1.2rem; font-weight: 700; color: var(--purple); letter-spacing: 0.05em; margin-bottom: 1.5rem; margin-top: 3.5rem; padding-bottom: 0.5rem; border-bottom: 1px solid var(--border); text-transform: uppercase; }
+        .review-body p { font-size: 1rem; color: var(--muted); line-height: 1.9; margin-bottom: 1.5rem; font-weight: 300; }
+        .review-body p strong { color: var(--white); font-weight: 600; }
+
+        .highlight-box { background: var(--surface); border: 1px solid var(--border); border-left: 3px solid var(--purple); padding: 1.5rem; margin: 2.5rem 0; }
+        .highlight-title { font-family: 'Orbitron', sans-serif; font-size: 0.8rem; font-weight: 700; color: var(--purple); letter-spacing: 0.1em; margin-bottom: 0.75rem; }
+        .highlight-text { font-size: 0.95rem; color: var(--white); line-height: 1.8; }
+
+        /* STAFF TICK & LISTS */
+        .pros-cons { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; background: var(--border); border: 1px solid var(--border); margin: 3rem 0; }
+        .pros, .cons { background: var(--surface); padding: 2rem; }
+        .pc-title { font-family: 'Orbitron', sans-serif; font-size: 0.8rem; font-weight: 700; letter-spacing: 0.1em; margin-bottom: 1.5rem; }
+        .pros .pc-title { color: #39ff14; }
+        .cons .pc-title { color: #ff2d4a; }
+        .pc-list { list-style: none; display: flex; flex-direction: column; gap: 0.8rem; }
+        .pc-list li { font-size: 0.85rem; color: var(--muted); font-weight: 300; padding-left: 1.5rem; position: relative; }
+        
+        /* The "Staff Ticks" */
+        .pros .pc-list li::before { content: '✔'; position: absolute; left: 0; color: #39ff14; font-weight: bold; font-size: 0.7rem; }
+        .cons .pc-list li::before { content: '✖'; position: absolute; left: 0; color: #ff2d4a; font-weight: bold; font-size: 0.7rem; }
+
+        .final-verdict { background: var(--surface); border: 1px solid var(--border); border-left: 4.5px solid var(--purple); padding: 2.5rem; margin-top: 4rem; }
+        .fv-title { font-family: 'Orbitron', sans-serif; font-size: 0.9rem; font-weight: 700; color: var(--purple); letter-spacing: 0.15em; margin-bottom: 1rem; }
+        .fv-text { font-size: 1.1rem; color: var(--white); line-height: 1.8; font-weight: 400; }
+
+        /* FOOTER */
+        footer { border-top: 1px solid rgba(0, 212, 255, 0.12); padding: 2.5rem 3rem; display: flex; justify-content: space-between; align-items: center; background: var(--bg2); margin-top: 6rem; }
+        .footer-name { font-family: 'Orbitron', sans-serif; font-size: 1rem; font-weight: 900; color: var(--cyan); }
+        .footer-copy { font-family: 'Share Tech Mono', monospace; font-size: 0.55rem; color: var(--muted); }
+
+        /* ANIMATION CLASS */
+        .fade-in { opacity: 0; transform: translateY(20px); transition: opacity 0.6s ease-out, transform 0.6s ease-out; }
+        .fade-in.visible { opacity: 1; transform: translateY(0); }
+
+        @media(max-width:768px){
+            nav{padding:0.9rem 1.5rem;}
+            .hero{padding:10rem 1.5rem 3rem;}
+            .review-body{padding:3rem 1.5rem;}
+            .pros-cons{grid-template-columns:1fr;}
+            .verdict-box{flex-direction:column;align-items:flex-start;}
+            footer{flex-direction:column;gap:1.5rem;text-align:center;}
+            .custom-cursor, .cursor-follower { display: none; }
+            html, body { cursor: auto; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="custom-cursor"></div>
+    <div class="cursor-follower"></div>
+
+    <nav>
+        <a href="index.html" class="nav-brand">
+            <img src="FalconDroplogo.png" class="nav-logo-img" alt="Falcon Drop Media">
+            <div>
+                <div class="nav-title">FALCONDROP MEDIA</div>
+                <div class="nav-sub">Media Criticism · Droppin' the Verdict ✔</div>
+            </div>
+        </a>
+        <a href="art.html" class="back-btn">← Art Reviews</a>
+    </nav>
+
+    <div class="hero fade-in">
+        <div class="review-tag">🎨 Art Review</div>
+        <h1 class="review-title">Van Gogh's <span>Starry Night</span></h1>
+        <div class="review-meta">
+            <div class="meta-item">Artist: <span>Vincent van Gogh</span></div>
+            <div class="meta-item">Year: <span>1889</span></div>
+            <div class="meta-item">Medium: <span>Oil on Canvas</span></div>
+            <div class="meta-item">Reviewed by: <span>Pure Yeet</span></div>
+        </div>
+        <div class="verdict-box">
+            <div>
+                <div class="verdict-score">9.2</div>
+                <div class="verdict-label">/ 10 Pure Yeet Verdict</div>
+            </div>
+            <div>
+                <div class="verdict-text">Painted After a Lucid Dream. Nothing Else Explains It.</div>
+                <div class="verdict-sub">The swirling sky, the glowing moon, the mystery settlers below</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="review-body">
+        <h2 class="fade-in">First Impressions — This Man Painted a Dream</h2>
+        <p class="fade-in">The sky is not still — it is moving. You can almost feel the wind. As a certified artist, my read is simple: <strong>this man painted after a lucid dream.</strong> There is no other explanation for a sky that flows like a living thing.</p>
+
+        <h2 class="fade-in">The Sky — One Pattern. Total Mastery.</h2>
+        <p class="fade-in">Van Gogh took one repeated brushstroke movement and used it across the entire sky without it ever feeling repetitive. Most artists either get the technical control or the emotional energy — Van Gogh got both at the same time.</p>
+
+        <div class="highlight-box fade-in">
+            <div class="highlight-title">🎨 Pure Yeet's Artist Eye</div>
+            <p class="highlight-text">Study the wave pattern. He blended the stars and moon into the flow seamlessly. Studying fine art at the Gallery taught me that keeping this level of consistency while the emotion remains raw is nearly impossible.</p>
+        </div>
+
+        <h2 class="fade-in">That Cypress Tree — Odd But Intentional</h2>
+        <p class="fade-in">That dark, twisted tree reaches into the sky like it doesn't belong. But the bush next to it is balanced perfectly. Van Gogh put something unsettling in the corner of a beautiful painting on purpose. It's a disruption, not a mistake.</p>
+
+        <h2 class="fade-in">The Settlement — Wizards or Farmers?</h2>
+        <p class="fade-in">Those settlers at the bottom are farmers, growing crops in a mountain range. But living under a sky like that every night? You either develop powers or you have a wizard in the village. I am convinced.</p>
+
+        <div class="pros-cons fade-in">
+            <div class="pros">
+                <div class="pc-title">+ WHAT WORKS</div>
+                <ul class="pc-list">
+                    <li>Masterful wave pattern technique</li>
+                    <li>Seamless sky and star blending</li>
+                    <li>Raw emotional energy</li>
+                    <li>Perfectly balanced foreground vegetation</li>
+                    <li>The settlement tells a deep story</li>
+                </ul>
+            </div>
+            <div class="cons">
+                <div class="pc-title">− WHAT DOESN'T</div>
+                <ul class="pc-list">
+                    <li>The cypress tree is unsettlingly odd</li>
+                    <li>The settlement raises too many mysteries</li>
+                </ul>
+            </div>
+        </div>
+
+        <h2 class="fade-in">Final Verdict</h2>
+        <div class="final-verdict fade-in">
+            <div class="fv-title">🟣 PURE YEET VERDICT — 9.2 / 10</div>
+            <p class="fv-text">Starry Night is a technical masterpiece of dream-state logic. One wave pattern, perfect blending, and raw magic. That odd cypress tree is the only thing holding it back from a perfect 10—it’s just a bit too disruptive. But the "Wizard Village" vibes and the swirling sky make this a mandatory viewing for anyone who likes their art with a bit of mystery. Pure Yeet has spoken. 🦅🎨</p>
+        </div>
+    </div>
+
+    <footer>
+        <div class="footer-name">FALCONDROP MEDIA</div>
+        <div>
+            <p class="footer-copy">&copy; 2026 Falcon Drop Media — All Rights Reserved</p>
+            <p class="footer-copy">Designed by <span style="color:var(--cyan)">Pure Yeet</span> — Zimbabwe</p>
+        </div>
+    </footer>
+
+    <script src="script.js" defer></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // 1. Scroll Observer for Fade-In
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(e => {
+                    if (e.isIntersecting) e.target.classList.add('visible');
+                });
+            }, { threshold: 0.1 });
+            document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+
+            // 2. Custom Cursor Logic
+            const dot = document.querySelector('.custom-cursor');
+            const ring = document.querySelector('.cursor-follower');
+            
+            document.addEventListener('mousemove', (e) => {
+                dot.style.left = e.clientX + 'px';
+                dot.style.top = e.clientY + 'px';
+                ring.style.left = e.clientX + 'px';
+                ring.style.top = e.clientY + 'px';
+            });
+
+            // 3. Hover Reactions
+            document.querySelectorAll('a, button, .back-btn').forEach(item => {
+                item.addEventListener('mouseenter', () => {
+                    ring.style.transform = 'translate(-50%, -50%) scale(1.5)';
+                    ring.style.backgroundColor = 'rgba(192, 132, 252, 0.1)';
+                });
+                item.addEventListener('mouseleave', () => {
+                    ring.style.transform = 'translate(-50%, -50%) scale(1)';
+                    ring.style.backgroundColor = 'transparent';
+                });
+            });
+        });
+    </script>
+</body>
+</html>
