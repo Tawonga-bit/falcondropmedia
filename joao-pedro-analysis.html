@@ -36,14 +36,13 @@
       filter: drop-shadow(0 0 12px rgba(57,255,20,1));
     }
 
-    /* Trail dots */
     .cursor-trail {
       position: fixed;
       pointer-events: none;
       z-index: 99998;
       width: 6px; height: 6px;
       border-radius: 50%;
-      background: var(--green);
+      background: #39ff14;
       opacity: 0;
       transform: translate(-50%, -50%);
       animation: trail-fade 0.45s ease forwards;
@@ -53,19 +52,6 @@
       0%   { opacity: 0.7; transform: translate(-50%, -50%) scale(1); }
       100% { opacity: 0;   transform: translate(-50%, -50%) scale(0.1); }
     }
-    /* ── END CURSOR ───────────────────────────────────────── */
-
-    /* GPU acceleration */
-    .animated-element, .card, .hero, .ticker {
-      will-change: transform, opacity;
-      transform: translateZ(0);
-    }
-    * {
-      -webkit-font-smoothing: antialiased;
-      -moz-osx-font-smoothing: grayscale;
-      box-sizing: border-box; margin: 0; padding: 0;
-    }
-    img { content-visibility: auto; }
 
     :root {
       --bg:#060d14; --bg2:#091320; --surface:#0b1a28;
@@ -137,7 +123,6 @@
       margin-bottom:1rem; margin-top:2.5rem;
       padding-bottom:0.5rem; border-bottom:1px solid var(--border);
     }
-    .review-body h2:first-child { margin-top:0; }
     .review-body p { font-size:1rem; color:var(--muted); line-height:1.9; margin-bottom:1.2rem; font-weight:300; }
     .review-body p strong { color:var(--white); font-weight:600; }
 
@@ -153,8 +138,7 @@
       gap:1.5px; background:var(--border);
       border:1px solid var(--border); margin:2rem 0;
     }
-    .pros { background:var(--surface); padding:1.5rem; }
-    .cons { background:var(--surface); padding:1.5rem; }
+    .pros, .cons { background:var(--surface); padding:1.5rem; }
     .pc-title { font-family:'Orbitron',monospace; font-size:0.8rem; font-weight:700; letter-spacing:0.1em; margin-bottom:1rem; }
     .pros .pc-title { color:#39ff14; }
     .cons .pc-title { color:#ff2d4a; }
@@ -189,22 +173,20 @@
       .hero { padding:7rem 1.5rem 3rem; }
       .review-body { padding:3rem 1.5rem; }
       .pros-cons { grid-template-columns:1fr; }
-      .verdict-box { flex-direction:column; align-items:flex-start; }
       footer { flex-direction:column; gap:1rem; text-align:center; }
     }
   </style>
 </head>
 <body>
 
-  <!-- ⚽ CUSTOM CURSOR ELEMENT -->
   <div id="custom-cursor">⚽</div>
 
   <nav>
     <a href="index.html" class="nav-brand">
-      <img src="FalconDroplogo.png" class="nav-logo-img" alt="FalconDrop Media logo — falcon with cracked game controller, circuit lines, cyan glow"/>
+      <img src="FalconDroplogo.png" class="nav-logo-img" alt="FalconDrop Media logo"/>
       <div>
         <div class="nav-title">FALCONDROP MEDIA</div>
-        <div class="nav-sub">Media Criticism · Droppin' the Verdict✔</div>
+        <div class="nav-sub">Media Criticism · Droppin' the Verdict ✔</div>
       </div>
     </a>
     <a href="football.html" class="back-btn">← Football</a>
@@ -221,7 +203,7 @@
     <div class="verdict-box">
       <div>
         <div class="verdict-score">8.7</div>
-        <div class="verdict-label">/ 10 Pure Yeet Verdict</div>
+        <div class="verdict-label">/ 10 Pure Yeet Verdict ✔</div>
       </div>
       <div>
         <div class="verdict-text">Chelsea's Best Signing This Season. No Debate.</div>
@@ -231,53 +213,39 @@
   </div>
 
   <div class="review-body">
-
     <h2 class="fade-in">Nobody Saw This Coming</h2>
-    <p class="fade-in">At the start of the season nobody was talking about <strong>Joao Pedro</strong> as Chelsea's most important player. He had disciplinary issues. He looked soft. He was going down looking for easy fouls instead of putting the ball in the net. Good link up play — yes. But soft. That was the word around him early on.</p>
-    <p class="fade-in">Fast forward to now and this man is scoring <strong>screamers and worldies</strong> and having some of the best individual performances in Europe. The transformation is one of the most impressive stories of the entire season and Pure Yeet is here to give him his flowers. 🌸</p>
+    <p class="fade-in">At the start of the season nobody was talking about <strong>Joao Pedro</strong> as Chelsea's most important player. He looked soft, going down looking for easy fouls instead of putting the ball in the net.</p>
 
     <h2 class="fade-in">From Soft to Drogba — The Transformation</h2>
-    <p class="fade-in">The early Joao Pedro at Chelsea was frustrating to watch as a fan. You could see the quality was there — the touch, the movement, the link up play was genuinely good. But <strong>he was soft</strong>. Going down for fouls instead of finishing. Not putting his body on the line. Not imposing himself.</p>
-    <p class="fade-in">And then something clicked. Suddenly this is a man scoring goals that remind you of <strong>Didier Drogba</strong> in his prime — powerful, clinical, unstoppable. The physicality came. The ruthlessness came. The goals came. And they did not stop coming.</p>
+    <p class="fade-in">Suddenly something clicked. He is now scoring goals that remind you of <strong>Didier Drogba</strong> in his prime — powerful, clinical, and unstoppable.</p>
 
     <div class="highlight-box fade-in">
       <div class="highlight-title">⚽ The Napoli Away Game — That Was The Moment</div>
-      <p class="highlight-text">Away to Napoli. European football. Big stage. Joao Pedro showed up and delivered one of his best individual performances. Brilliant goals that secured Chelsea's place in the last 16 — no play offs needed. That night told you everything about where his confidence was.</p>
+      <p class="highlight-text">His performance away to Napoli secured Chelsea's place in the last 16 without needing play-offs.</p>
     </div>
-
-    <h2 class="fade-in">The Napoli Night — No Play Offs Needed</h2>
-    <p class="fade-in">The <strong>away game at Napoli</strong> was the moment that really showed what Joao Pedro had become. European football, hostile atmosphere, a game Chelsea needed to win — and he delivered. Brilliant goals that secured Chelsea in the last 16 without needing play offs.</p>
-    <p class="fade-in">That is the kind of performance that defines a player's season. Big stage. Big moment. Big goals. Joao Pedro did not flinch. That is not the same soft player from the start of the season — that is a player who has found himself completely.</p>
-
-    <h2 class="fade-in">Screamers and Worldies — The Goals Are Special</h2>
-    <p class="fade-in">Let's talk about the actual goals because they deserve their own section. <strong>Joao Pedro is not just scoring tap ins</strong> — this man is hitting screamers from distance, finishing with power, and producing worldies that make you rewatch the clip three times. The quality of his goals this season has been something else.</p>
-    <p class="fade-in">The Drogba comparison is not made lightly. Drogba was a player who could win a game on his own through sheer individual brilliance and physical dominance. When Joao Pedro is in this form he carries that same energy. Chelsea fans know exactly what that means.</p>
 
     <div class="pros-cons fade-in">
       <div class="pros">
         <div class="pc-title">&#43; WHAT WORKS</div>
         <ul class="pc-list">
-          <li>Screamers and worldies — goals are special</li>
+          <li>Screamers and worldies</li>
           <li>Napoli away performance was elite</li>
-          <li>Drogba-like physicality and ruthlessness</li>
-          <li>Most improved player in the squad</li>
-          <li>Big game mentality fully developed</li>
+          <li>Drogba-like physicality</li>
         </ul>
       </div>
       <div class="cons">
         <div class="pc-title">&#8722; WHAT DIDN'T</div>
         <ul class="pc-list">
-          <li>Slow start — looked soft early season</li>
+          <li>Slow start to the season</li>
           <li>Disciplinary issues cost him early on</li>
-          <li>Still goes down too easily sometimes</li>
         </ul>
       </div>
     </div>
 
     <h2 class="fade-in">Final Verdict</h2>
     <div class="final-verdict fade-in">
-      <div class="fv-title">&#128994; PURE YEET VERDICT — 8.7 / 10</div>
-      <p class="fv-text">Joao Pedro is Chelsea's most improved player and best signing of this season. Nobody saw this coming. He started soft, had disciplinary issues, was looking for easy fouls instead of goals. And then he flipped the switch completely. Screamers. Worldies. Drogba vibes. That Napoli away performance where he scored brilliant goals to put us in the last 16 with no play offs needed — that was the night the whole world saw what Chelsea had on their hands. The transformation is real and Pure Yeet is giving him full credit. 🦅🔵</p>
+      <div class="fv-title">&#128994; PURE YEET VERDICT — 8.7 / 10 ✔</div>
+      <p class="fv-text">Joao Pedro is Chelsea's most improved player. Screamers. Worldies. Drogba vibes. The transformation is real and Pure Yeet is giving him full credit. 🦅🔵</p>
     </div>
   </div>
 
@@ -287,55 +255,36 @@
     <p class="footer-copy">Designed by <span style="color:#00d4ff">Pure Yeet</span> — Zimbabwe</p>
   </footer>
 
-  <script defer>
-    // ── FOOTBALL CURSOR ──────────────────────────────────────
+  <script>
     const cursor = document.getElementById('custom-cursor');
-    let mouseX = -100, mouseY = -100;
-    let cursorX = -100, cursorY = -100;
-    let trailThrottle = 0;
+    let mouseX = -100, mouseY = -100, cursorX = -100, cursorY = -100, trailThrottle = 0;
 
     document.addEventListener('mousemove', e => {
-      mouseX = e.clientX;
-      mouseY = e.clientY;
-
-      // Green trail dot every ~60px of movement
+      mouseX = e.clientX; mouseY = e.clientY;
       trailThrottle++;
       if (trailThrottle % 5 === 0) {
         const dot = document.createElement('div');
-        dot.classList.add('cursor-trail');
-        dot.style.left = mouseX + 'px';
-        dot.style.top  = mouseY + 'px';
+        dot.className = 'cursor-trail';
+        dot.style.left = mouseX + 'px'; dot.style.top = mouseY + 'px';
         document.body.appendChild(dot);
         setTimeout(() => dot.remove(), 450);
       }
     });
 
-    // Smooth follow
     function animateCursor() {
       cursorX += (mouseX - cursorX) * 0.18;
       cursorY += (mouseY - cursorY) * 0.18;
-      cursor.style.left = cursorX + 'px';
-      cursor.style.top  = cursorY + 'px';
+      cursor.style.left = cursorX + 'px'; cursor.style.top = cursorY + 'px';
       requestAnimationFrame(animateCursor);
     }
     animateCursor();
 
-    // Click + hover states
     document.addEventListener('mousedown', () => cursor.classList.add('clicking'));
-    document.addEventListener('mouseup',   () => cursor.classList.remove('clicking'));
+    document.addEventListener('mouseup', () => cursor.classList.remove('clicking'));
 
-    document.querySelectorAll('a, button, .verdict-box, .highlight-box, .pros-cons, .final-verdict').forEach(el => {
-      el.addEventListener('mouseenter', () => cursor.classList.add('hovering'));
-      el.addEventListener('mouseleave', () => cursor.classList.remove('hovering'));
-    });
-
-    // ── FADE IN OBSERVER ─────────────────────────────────────
     const observer = new IntersectionObserver((entries) => {
-      entries.forEach(e => {
-        if (e.isIntersecting) e.target.classList.add('visible');
-      });
+      entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
     }, { threshold: 0.1 });
-
     document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
   </script>
 </body>
